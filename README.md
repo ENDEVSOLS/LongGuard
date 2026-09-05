@@ -68,60 +68,12 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 
 ## 🏗️ Architecture
 
-```
-                  ┌─────────────────────────────────────────┐
-                  │          Agent Execution Loop           │
-                  └────────────────────┬────────────────────┘
-                                       │  Step N
-                                       ▼
-                            ┌─────────────────────┐
-                            │   LongGuard Hook    │
-                            └──────────┬──────────┘
-                                       │
-                   ┌───────────────────┴───────────────────┐
-                   ▼                                       ▼
-         [ No Loop Detected ]                     [ Loop Detected! ]
-                   │                                       │
-            State: CLOSED                                  ▼
-          (Normal execution)                      State: REFLECTING
-                                                           │
-                                                Inject "Reflect & Pivot"
-                                                Prompt into Context
-                                                           │
-                                             ┌─────────────┴─────────────┐
-                                             ▼                           ▼
-                                        [ Recovers ]              [ Still Stuck ]
-                                             │                           │
-                                       State: CLOSED               State: OPEN
-                                       (Runs to end)            (Graceful Termination)
-```
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/architecture.svg" alt="LongGuard Architecture Flow" width="100%" />
 </p>
 
-<details>
-<summary><b>View Mermaid.js Source</b></summary>
-
-```mermaid
-flowchart TD
-    subgraph Execution ["Agent Execution Loop"]
-        A["🤖 Agent Step N"]
-    end
-
-    A --> B["🛡️ LongGuard Hook & Detectors<br/><i>(Tool Repeat, Semantic Oscillation, Dead-End Drift, Token Velocity)</i>"]
-
-    B -->|"No Loop Detected"| C["🟢 State: CLOSED<br/><b>Decision: continue</b><br/>Agent proceeds to Step N+1"]
-    B -->|"Loop Pattern Detected!"| D["🟡 State: REFLECTING<br/><b>Decision: reflect</b><br/>Injects 'Reflect & Pivot' Prompt into context"]
-
-    D --> E{"Agent Evaluates Pivot"}
-    E -->|"Recovers (Novel reasoning/tool)"| C
-    E -->|"Loop Persists"| F["🔴 State: OPEN<br/><b>Decision: kill</b><br/>Graceful Termination (Full State Saved)"]
-```
-
-</details>
-
 ---
+
 
 ## ⚡ Quick Start
 

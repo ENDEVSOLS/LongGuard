@@ -1,157 +1,94 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 540" width="100%" height="100%" style="background: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 450" width="100%" height="100%" style="background: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <defs>
-    <!-- Gradients -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="100%" stop-color="#1e293b" />
-    </linearGradient>
-
-    <linearGradient id="agentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#3b82f6" />
-      <stop offset="100%" stop-color="#6366f1" />
-    </linearGradient>
-
-    <linearGradient id="guardGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#8b5cf6" />
-      <stop offset="100%" stop-color="#d946ef" />
-    </linearGradient>
-
-    <linearGradient id="closedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#10b981" />
-      <stop offset="100%" stop-color="#059669" />
-    </linearGradient>
-
-    <linearGradient id="reflectGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f59e0b" />
-      <stop offset="100%" stop-color="#d97706" />
-    </linearGradient>
-
-    <linearGradient id="openGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#ef4444" />
-      <stop offset="100%" stop-color="#dc2626" />
-    </linearGradient>
-
-    <!-- Filters for shadow -->
-    <filter id="shadow" x="-8%" y="-8%" width="120%" height="125%" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.35" />
-    </filter>
-
-    <filter id="cardShadow" x="-10%" y="-10%" width="125%" height="130%" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.25" />
-    </filter>
-
     <!-- Arrow Markers -->
     <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 8 5 L 0 9 z" fill="#94a3b8" />
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
     </marker>
     <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 8 5 L 0 9 z" fill="#10b981" />
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#10b981" />
     </marker>
     <marker id="arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f59e0b" />
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f59e0b" />
     </marker>
     <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 8 5 L 0 9 z" fill="#ef4444" />
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ef4444" />
     </marker>
   </defs>
 
-  <!-- Canvas Card -->
-  <rect x="10" y="10" width="900" height="520" rx="16" fill="url(#bgGrad)" stroke="#334155" stroke-width="1.5" filter="url(#shadow)" />
-
-  <!-- Grid decoration background pattern (subtle) -->
-  <g opacity="0.05">
-    <path d="M 10 60 L 910 60 M 10 120 L 910 120 M 10 180 L 910 180 M 10 240 L 910 240 M 10 300 L 910 300 M 10 360 L 910 360 M 10 420 L 910 420 M 10 480 L 910 480" stroke="#ffffff" stroke-width="1" />
-    <path d="M 100 10 L 100 530 M 200 10 L 200 530 M 300 10 L 300 530 M 400 10 L 400 530 M 500 10 L 500 530 M 600 10 L 600 530 M 700 10 L 700 530 M 800 10 L 800 530" stroke="#ffffff" stroke-width="1" />
-  </g>
-
-  <!-- Header / Badge -->
-  <g transform="translate(30, 36)">
-    <rect x="0" y="0" width="130" height="26" rx="13" fill="#1e293b" stroke="#475569" stroke-width="1" />
-    <circle cx="13" cy="13" r="5" fill="#10b981" />
-    <text x="26" y="17" fill="#cbd5e1" font-size="11" font-weight="600" letter-spacing="0.5">STATE MACHINE</text>
-  </g>
-  <text x="175" y="54" fill="#94a3b8" font-size="13" font-weight="500">LongGuard Runtime Cognitive Circuit Breaker Flow</text>
+  <!-- Canvas Container -->
+  <rect x="2" y="2" width="856" height="446" rx="12" fill="#0d1117" stroke="#21262d" stroke-width="1.5" />
 
   <!-- 1. Node: Agent Execution Loop -->
-  <g transform="translate(320, 70)" filter="url(#cardShadow)">
-    <rect x="0" y="0" width="280" height="54" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
-    <rect x="0" y="0" width="280" height="4" rx="2" fill="url(#agentGrad)" />
-    <text x="140" y="32" fill="#ffffff" font-size="15" font-weight="700" text-anchor="middle">🤖 Agent Execution Loop</text>
-    <text x="140" y="47" fill="#94a3b8" font-size="10" font-weight="500" text-anchor="middle">LangGraph / LangChain / Custom Agent</text>
+  <g transform="translate(290, 28)">
+    <rect x="0" y="0" width="280" height="54" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+    <text x="140" y="25" fill="#f0f6fc" font-size="14" font-weight="600" text-anchor="middle">Agent Execution Loop</text>
+    <text x="140" y="42" fill="#8b949e" font-size="11" text-anchor="middle">LangGraph • LangChain • Custom Loop</text>
   </g>
 
-  <!-- Line 1 -> 2 -->
-  <path d="M 460 124 L 460 156" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)" />
-  <rect x="425" y="132" width="70" height="18" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1" />
-  <text x="460" y="145" fill="#cbd5e1" font-size="10" font-weight="600" text-anchor="middle">Step N</text>
+  <!-- Arrow: Agent Loop to LongGuard -->
+  <path d="M 430 82 L 430 120" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)" />
+  <rect x="402" y="93" width="56" height="18" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="430" y="106" fill="#c9d1d9" font-size="10" font-weight="600" text-anchor="middle">Step N</text>
 
-  <!-- 2. Node: LongGuard Hook & StepAnalyzer -->
-  <g transform="translate(290, 162)" filter="url(#cardShadow)">
-    <rect x="0" y="0" width="340" height="62" rx="10" fill="#1e293b" stroke="#8b5cf6" stroke-width="2" />
-    <rect x="0" y="0" width="340" height="4" rx="2" fill="url(#guardGrad)" />
-    <text x="170" y="30" fill="#ffffff" font-size="15" font-weight="700" text-anchor="middle">🛡️ LongGuard Hook &amp; Detectors</text>
-    <text x="170" y="48" fill="#a78bfa" font-size="11" font-weight="500" text-anchor="middle">Tool Repeat • Semantic Oscillation • Dead-End • Velocity</text>
+  <!-- 2. Node: LongGuard Circuit Breaker -->
+  <g transform="translate(240, 126)">
+    <rect x="0" y="0" width="380" height="62" rx="8" fill="#161b22" stroke="#388bfd" stroke-width="1.5" />
+    <text x="190" y="27" fill="#ffffff" font-size="14" font-weight="600" text-anchor="middle">🛡️ LongGuard Circuit Breaker</text>
+    <text x="190" y="46" fill="#8b949e" font-size="11" text-anchor="middle">Tool Repeat • Semantic Oscillation • Dead-End • Token Velocity</text>
   </g>
 
-  <!-- Split Branch Lines -->
-  <!-- Left path to CLEAN -->
-  <path d="M 360 224 L 360 270 L 220 270 L 220 300" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrow-green)" />
-  <rect x="235" y="258" width="115" height="22" rx="5" fill="#064e3b" stroke="#059669" stroke-width="1" />
-  <text x="292" y="273" fill="#a7f3d0" font-size="11" font-weight="600" text-anchor="middle">No Loop Detected</text>
+  <!-- Branch Left: Normal Flow -->
+  <path d="M 330 188 L 330 220 L 190 220 L 190 248" stroke="#10b981" stroke-width="1.5" fill="none" marker-end="url(#arrow-green)" />
+  <rect x="200" y="210" width="118" height="20" rx="4" fill="#04261a" stroke="#10b981" stroke-width="1" />
+  <text x="259" y="224" fill="#34d399" font-size="10" font-weight="600" text-anchor="middle">No Loop Detected</text>
 
-  <!-- Right path to LOOP DETECTED -->
-  <path d="M 560 224 L 560 270 L 700 270 L 700 300" stroke="#f59e0b" stroke-width="2" fill="none" marker-end="url(#arrow-amber)" />
-  <rect x="635" y="258" width="125" height="22" rx="5" fill="#78350f" stroke="#d97706" stroke-width="1" />
-  <text x="697" y="273" fill="#fde68a" font-size="11" font-weight="600" text-anchor="middle">⚠️ Loop Detected!</text>
+  <!-- Branch Right: Loop Detected -->
+  <path d="M 530 188 L 530 220 L 650 220 L 650 248" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#arrow-amber)" />
+  <rect x="585" y="210" width="112" height="20" rx="4" fill="#2d1703" stroke="#f59e0b" stroke-width="1" />
+  <text x="641" y="224" fill="#fbbf24" font-size="10" font-weight="600" text-anchor="middle">Loop Detected!</text>
 
-  <!-- 3A. Node: CLOSED (Normal) -->
-  <g transform="translate(90, 306)" filter="url(#cardShadow)">
-    <rect x="0" y="0" width="260" height="84" rx="10" fill="#0f291e" stroke="#10b981" stroke-width="2" />
-    <rect x="0" y="0" width="260" height="4" rx="2" fill="url(#closedGrad)" />
-    <rect x="18" y="16" width="105" height="22" rx="11" fill="#10b981" />
-    <text x="70" y="31" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">STATE: CLOSED</text>
-    <text x="130" y="31" fill="#34d399" font-size="13" font-weight="700">Healthy</text>
-    <text x="18" y="56" fill="#e2e8f0" font-size="12" font-weight="600">Decision: continue</text>
-    <text x="18" y="72" fill="#94a3b8" font-size="11">Agent proceeds to Step N+1</text>
+  <!-- 3A. Node: CLOSED State -->
+  <g transform="translate(70, 254)">
+    <rect x="0" y="0" width="240" height="82" rx="8" fill="#161b22" stroke="#238636" stroke-width="1.5" />
+    <!-- Status Dot -->
+    <circle cx="20" cy="24" r="5" fill="#2ea043" />
+    <text x="32" y="28" fill="#f0f6fc" font-size="13" font-weight="600">State: CLOSED</text>
+    <text x="20" y="50" fill="#3fb950" font-size="12" font-weight="600">Decision: continue</text>
+    <text x="20" y="68" fill="#8b949e" font-size="11">Agent proceeds to Step N+1</text>
   </g>
 
-  <!-- Loop back arrow from CLOSED to Agent Loop -->
-  <path d="M 90 348 L 50 348 L 50 97 L 314 97" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,4" fill="none" marker-end="url(#arrow-green)" />
-  <text x="60" y="220" fill="#34d399" font-size="10" font-weight="600" transform="rotate(-90, 60, 220)">Cycle continues</text>
+  <!-- Loopback arrow from CLOSED to Agent Loop -->
+  <path d="M 70 295 L 35 295 L 35 55 L 284 55" stroke="#238636" stroke-width="1.2" stroke-dasharray="3,3" fill="none" marker-end="url(#arrow-green)" />
+  <text x="44" y="175" fill="#3fb950" font-size="10" font-weight="500" transform="rotate(-90, 44, 175)">Continuous cycle</text>
 
-  <!-- 3B. Node: REFLECTING (Inject Pivot Prompt) -->
-  <g transform="translate(565, 306)" filter="url(#cardShadow)">
-    <rect x="0" y="0" width="270" height="84" rx="10" fill="#2b1d0c" stroke="#f59e0b" stroke-width="2" />
-    <rect x="0" y="0" width="270" height="4" rx="2" fill="url(#reflectGrad)" />
-    <rect x="18" y="16" width="130" height="22" rx="11" fill="#f59e0b" />
-    <text x="83" y="31" fill="#000000" font-size="10" font-weight="700" text-anchor="middle">STATE: REFLECTING</text>
-    <text x="18" y="56" fill="#fde68a" font-size="12" font-weight="600">Decision: reflect</text>
-    <text x="18" y="72" fill="#cbd5e1" font-size="11">Injects "Reflect &amp; Pivot" Prompt</text>
+  <!-- 3B. Node: REFLECTING State -->
+  <g transform="translate(520, 254)">
+    <rect x="0" y="0" width="260" height="82" rx="8" fill="#161b22" stroke="#d29922" stroke-width="1.5" />
+    <!-- Status Dot -->
+    <circle cx="20" cy="24" r="5" fill="#d29922" />
+    <text x="32" y="28" fill="#f0f6fc" font-size="13" font-weight="600">State: REFLECTING</text>
+    <text x="20" y="50" fill="#e3b341" font-size="12" font-weight="600">Decision: reflect</text>
+    <text x="20" y="68" fill="#8b949e" font-size="11">Injects "Reflect &amp; Pivot" prompt</text>
   </g>
 
-  <!-- Line 3B down to Decision fork -->
-  <path d="M 700 390 L 700 420" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)" />
+  <!-- Reflection outcomes -->
+  <path d="M 650 336 L 650 362" stroke="#d29922" stroke-width="1.5" />
+  <path d="M 650 362 L 510 362 L 510 380" stroke="#10b981" stroke-width="1.2" fill="none" marker-end="url(#arrow-green)" />
+  <path d="M 650 362 L 720 362 L 720 380" stroke="#ef4444" stroke-width="1.2" fill="none" marker-end="url(#arrow-red)" />
 
-  <!-- 4A. Node: Recovers -> Back to CLOSED -->
-  <g transform="translate(480, 430)" filter="url(#cardShadow)">
-    <rect x="0" y="0" width="180" height="66" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.5" />
-    <text x="90" y="24" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle">🔄 Recovers</text>
-    <text x="90" y="42" fill="#94a3b8" font-size="10" text-anchor="middle">Novel thought or action</text>
-    <text x="90" y="56" fill="#6ee7b7" font-size="10" font-weight="600" text-anchor="middle">Resets to CLOSED</text>
+  <!-- 4A. Node: Recovers -->
+  <g transform="translate(420, 384)">
+    <rect x="0" y="0" width="180" height="46" rx="6" fill="#161b22" stroke="#238636" stroke-width="1.2" />
+    <text x="90" y="20" fill="#3fb950" font-size="11" font-weight="600" text-anchor="middle">✓ Recovers (New Action)</text>
+    <text x="90" y="35" fill="#8b949e" font-size="10" text-anchor="middle">Resets to CLOSED state</text>
   </g>
-  <path d="M 480 463 L 220 463 L 220 396" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,4" fill="none" marker-end="url(#arrow-green)" />
+  <path d="M 420 407 L 190 407 L 190 342" stroke="#238636" stroke-width="1.2" stroke-dasharray="3,3" fill="none" marker-end="url(#arrow-green)" />
 
-  <!-- 4B. Node: Still Stuck -> OPEN (Graceful Kill) -->
-  <g transform="translate(680, 430)" filter="url(#cardShadow)">
-    <rect x="0" y="0" width="200" height="66" rx="8" fill="#2d1215" stroke="#ef4444" stroke-width="2" />
-    <rect x="0" y="0" width="200" height="4" rx="2" fill="url(#openGrad)" />
-    <rect x="14" y="12" width="90" height="18" rx="9" fill="#ef4444" />
-    <text x="59" y="25" fill="#ffffff" font-size="9" font-weight="700" text-anchor="middle">STATE: OPEN</text>
-    <text x="14" y="46" fill="#fca5a5" font-size="11" font-weight="700">Graceful Termination</text>
-    <text x="14" y="59" fill="#94a3b8" font-size="10">State saved • zero crash</text>
+  <!-- 4B. Node: Graceful Halt -->
+  <g transform="translate(630, 384)">
+    <rect x="0" y="0" width="180" height="46" rx="6" fill="#161b22" stroke="#f85149" stroke-width="1.2" />
+    <text x="90" y="20" fill="#f85149" font-size="11" font-weight="600" text-anchor="middle">State: OPEN (Graceful Halt)</text>
+    <text x="90" y="35" fill="#8b949e" font-size="10" text-anchor="middle">Preserves state • Zero crash</text>
   </g>
-
-  <path d="M 700 420 L 570 420 L 570 428" stroke="#10b981" stroke-width="1.5" fill="none" marker-end="url(#arrow-green)" />
-  <path d="M 700 420 L 780 420 L 780 428" stroke="#ef4444" stroke-width="1.5" fill="none" marker-end="url(#arrow-red)" />
 
 </svg>
