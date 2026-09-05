@@ -1,4 +1,4 @@
-name: Release & Publish
+name: Release
 
 on:
   push:
@@ -43,30 +43,3 @@ jobs:
           generate_release_notes: true
           draft: false
           prerelease: false
-
-      - name: Upload dist artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-package-distributions
-          path: dist/
-
-  pypi-publish:
-    name: Publish to PyPI
-    needs: [build-and-release]
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/longguard
-    permissions:
-      id-token: write  # Mandatory for PyPI Trusted Publishing
-
-    steps:
-      - name: Download dists
-        uses: actions/download-artifact@v4
-        with:
-          name: python-package-distributions
-          path: dist/
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        continue-on-error: true  # Prevents workflow failure if PyPI Trusted Publishing is not yet enabled
