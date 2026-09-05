@@ -12,9 +12,10 @@ If you discover a security issue or vulnerability within LongGuard, please do **
 
 Instead, report it responsibly by emailing:
 
-**security@endevsols.com** or **info@endevsols.com**
+**technology@endevsols.com**
 
 Please include:
+
 - A description of the vulnerability and its potential impact.
 - Steps to reproduce or a minimal proof of concept script.
 - Any suggested mitigations or patches.

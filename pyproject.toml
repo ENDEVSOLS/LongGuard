@@ -11,8 +11,9 @@ license = "MIT"
 requires-python = ">=3.10"
 keywords = ["langchain", "langgraph", "agents", "circuit-breaker", "llm", "cost-control", "loop-detection"]
 authors = [
-    { name = "EnDevSols", email = "info@endevsols.com" },
+    { name = "EnDevSols", email = "technology@endevsols.com" },
 ]
+
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",

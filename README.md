@@ -1,8 +1,9 @@
 <div align="center">
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo.svg" alt="LongGuard Logo" width="460"/>
+  <img src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo.svg" alt="LongGuard Logo" width="340"/>
 </p>
+
 
 **In-flight circuit breaker & reasoning loop recovery for LangGraph & LangChain agents**
 
@@ -232,8 +233,9 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ## 🛡️ Security
 
-For vulnerability disclosures, please review [SECURITY.md](SECURITY.md) or contact security@endevsols.com.
+For vulnerability disclosures, please review [SECURITY.md](SECURITY.md) or contact technology@endevsols.com.
 
 ## 📄 License
+
 
 LongGuard is open-source software released under the [MIT License](LICENSE).
