@@ -1,0 +1,68 @@
+site_name: LongGuard
+site_description: Circuit breaker middleware for LangGraph & LangChain agents — detect loops, inject Reflect & Pivot, prevent runaway costs.
+site_url: https://endevsols.github.io/LongGuard/
+site_author: EnDevSols
+
+repo_name: ENDEVSOLS/LongGuard
+repo_url: https://github.com/ENDEVSOLS/LongGuard
+
+copyright: Copyright &copy; 2026 EnDevSols
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+
+nav:
+  - Overview: index.md
+  - Quick Start: getting-started.md
+  - How It Works:
+      - Circuit Breaker State Machine: concepts/how-it-works.md
+      - Loop Detectors: concepts/detectors.md
+      - Reflect & Pivot Recovery: concepts/reflect-and-pivot.md
+  - Integrations:
+      - LangGraph (1-Line): integrations/langgraph.md
+      - LangChain: integrations/langchain.md
+  - Guides:
+      - Configuration: guides/configuration.md
+      - GuardReport & Telemetry: guides/reporting.md
+  - Contributing: contributing.md
