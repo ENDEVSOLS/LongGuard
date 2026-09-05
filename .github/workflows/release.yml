@@ -54,7 +54,34 @@ jobs:
         id: release_body
         run: |
           VERSION="${{ steps.version.outputs.VERSION }}"
-          cat <<'BODY' > release_body.md
+          TAG="${{ steps.version.outputs.TAG }}"
+
+          # Extract changelog section for this version from CHANGELOG.md
+          python3 - <<PY_EOF > changelog_section.md
+          import re, sys
+          version = "${VERSION}".strip()
+          try:
+              with open("CHANGELOG.md", "r", encoding="utf-8") as f:
+                  text = f.read()
+              pattern = rf"## \[?{re.escape(version)}\]?[^\n]*\n(.*?)(?=\n## |\Z)"
+              match = re.search(pattern, text, re.DOTALL)
+              if match:
+                  notes = match.group(1).strip()
+                  notes = re.sub(r"\n---\s*$", "", notes).strip()
+                  print(notes)
+              else:
+                  print("*No specific changelog entry found in CHANGELOG.md.*")
+          except Exception as e:
+              print(f"*Changelog extraction skipped: {e}*")
+          PY_EOF
+
+          cat <<BODY > release_body.md
+          ## 🚀 What's Changed in ${TAG}
+
+          $(cat changelog_section.md)
+
+          ---
+
           ## 📦 Install / Upgrade
 
           ```bash
@@ -71,6 +98,7 @@ jobs:
           | 🐍 PyPI | https://pypi.org/project/longguard/ |
           | 🌐 EnDevSols Long Suite | https://endevsols.com/open-source |
           | 🐛 Report a Bug | https://github.com/ENDEVSOLS/LongGuard/issues |
+          | 📜 Full Changelog | https://github.com/ENDEVSOLS/LongGuard/blob/main/CHANGELOG.md |
 
           ## ✅ Quality
 
@@ -88,8 +116,10 @@ jobs:
         with:
           tag_name: ${{ steps.version.outputs.TAG }}
           name: LongGuard ${{ steps.version.outputs.TAG }}
-          files: dist/*
-          generate_release_notes: true
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
+          generate_release_notes: false
           body_path: release_body.md
           draft: false
           prerelease: false
