@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 450" width="100%" height="100%" style="background: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Arrow Markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#10b981" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f59e0b" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ef4444" />
+    </marker>
+  </defs>
+
+  <!-- Canvas Container -->
+  <rect x="2" y="2" width="856" height="446" rx="12" fill="#0d1117" stroke="#21262d" stroke-width="1.5" />
+
+  <!-- 1. Node: Agent Execution Loop -->
+  <g transform="translate(290, 28)">
+    <rect x="0" y="0" width="280" height="54" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5" />
+    <text x="140" y="25" fill="#f0f6fc" font-size="14" font-weight="600" text-anchor="middle">Agent Execution Loop</text>
+    <text x="140" y="42" fill="#8b949e" font-size="11" text-anchor="middle">LangGraph • LangChain • Custom Loop</text>
+  </g>
+
+  <!-- Arrow: Agent Loop to LongGuard -->
+  <path d="M 430 82 L 430 120" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)" />
+  <rect x="402" y="93" width="56" height="18" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1" />
+  <text x="430" y="106" fill="#c9d1d9" font-size="10" font-weight="600" text-anchor="middle">Step N</text>
+
+  <!-- 2. Node: LongGuard Circuit Breaker -->
+  <g transform="translate(240, 126)">
+    <rect x="0" y="0" width="380" height="62" rx="8" fill="#161b22" stroke="#388bfd" stroke-width="1.5" />
+    <text x="190" y="27" fill="#ffffff" font-size="14" font-weight="600" text-anchor="middle">🛡️ LongGuard Circuit Breaker</text>
+    <text x="190" y="46" fill="#8b949e" font-size="11" text-anchor="middle">Tool Repeat • Semantic Oscillation • Dead-End • Token Velocity</text>
+  </g>
+
+  <!-- Branch Left: Normal Flow -->
+  <path d="M 330 188 L 330 220 L 190 220 L 190 248" stroke="#10b981" stroke-width="1.5" fill="none" marker-end="url(#arrow-green)" />
+  <rect x="200" y="210" width="118" height="20" rx="4" fill="#04261a" stroke="#10b981" stroke-width="1" />
+  <text x="259" y="224" fill="#34d399" font-size="10" font-weight="600" text-anchor="middle">No Loop Detected</text>
+
+  <!-- Branch Right: Loop Detected -->
+  <path d="M 530 188 L 530 220 L 650 220 L 650 248" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#arrow-amber)" />
+  <rect x="585" y="210" width="112" height="20" rx="4" fill="#2d1703" stroke="#f59e0b" stroke-width="1" />
+  <text x="641" y="224" fill="#fbbf24" font-size="10" font-weight="600" text-anchor="middle">Loop Detected!</text>
+
+  <!-- 3A. Node: CLOSED State -->
+  <g transform="translate(70, 254)">
+    <rect x="0" y="0" width="240" height="82" rx="8" fill="#161b22" stroke="#238636" stroke-width="1.5" />
+    <!-- Status Dot -->
+    <circle cx="20" cy="24" r="5" fill="#2ea043" />
+    <text x="32" y="28" fill="#f0f6fc" font-size="13" font-weight="600">State: CLOSED</text>
+    <text x="20" y="50" fill="#3fb950" font-size="12" font-weight="600">Decision: continue</text>
+    <text x="20" y="68" fill="#8b949e" font-size="11">Agent proceeds to Step N+1</text>
+  </g>
+
+  <!-- Loopback arrow from CLOSED to Agent Loop -->
+  <path d="M 70 295 L 35 295 L 35 55 L 284 55" stroke="#238636" stroke-width="1.2" stroke-dasharray="3,3" fill="none" marker-end="url(#arrow-green)" />
+  <text x="44" y="175" fill="#3fb950" font-size="10" font-weight="500" transform="rotate(-90, 44, 175)">Continuous cycle</text>
+
+  <!-- 3B. Node: REFLECTING State -->
+  <g transform="translate(520, 254)">
+    <rect x="0" y="0" width="260" height="82" rx="8" fill="#161b22" stroke="#d29922" stroke-width="1.5" />
+    <!-- Status Dot -->
+    <circle cx="20" cy="24" r="5" fill="#d29922" />
+    <text x="32" y="28" fill="#f0f6fc" font-size="13" font-weight="600">State: REFLECTING</text>
+    <text x="20" y="50" fill="#e3b341" font-size="12" font-weight="600">Decision: reflect</text>
+    <text x="20" y="68" fill="#8b949e" font-size="11">Injects "Reflect &amp; Pivot" prompt</text>
+  </g>
+
+  <!-- Reflection outcomes -->
+  <path d="M 650 336 L 650 362" stroke="#d29922" stroke-width="1.5" />
+  <path d="M 650 362 L 510 362 L 510 380" stroke="#10b981" stroke-width="1.2" fill="none" marker-end="url(#arrow-green)" />
+  <path d="M 650 362 L 720 362 L 720 380" stroke="#ef4444" stroke-width="1.2" fill="none" marker-end="url(#arrow-red)" />
+
+  <!-- 4A. Node: Recovers -->
+  <g transform="translate(420, 384)">
+    <rect x="0" y="0" width="180" height="46" rx="6" fill="#161b22" stroke="#238636" stroke-width="1.2" />
+    <text x="90" y="20" fill="#3fb950" font-size="11" font-weight="600" text-anchor="middle">✓ Recovers (New Action)</text>
+    <text x="90" y="35" fill="#8b949e" font-size="10" text-anchor="middle">Resets to CLOSED state</text>
+  </g>
+  <path d="M 420 407 L 190 407 L 190 342" stroke="#238636" stroke-width="1.2" stroke-dasharray="3,3" fill="none" marker-end="url(#arrow-green)" />
+
+  <!-- 4B. Node: Graceful Halt -->
+  <g transform="translate(630, 384)">
+    <rect x="0" y="0" width="180" height="46" rx="6" fill="#161b22" stroke="#f85149" stroke-width="1.2" />
+    <text x="90" y="20" fill="#f85149" font-size="11" font-weight="600" text-anchor="middle">State: OPEN (Graceful Halt)</text>
+    <text x="90" y="35" fill="#8b949e" font-size="10" text-anchor="middle">Preserves state • Zero crash</text>
+  </g>
+
+</svg>

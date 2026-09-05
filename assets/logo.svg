@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 86" width="100%" height="100%" style="background: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <style>
+    .brand-text { fill: #0f172a; }
+    @media (prefers-color-scheme: dark) {
+      .brand-text { fill: #ffffff; }
+    }
+  </style>
+
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Shield Icon (Vertically Centered at y=43) -->
+  <g transform="translate(8, 0)">
+    <!-- Soft Glow -->
+    <circle cx="36" cy="43" r="30" fill="#6366f1" opacity="0.16" filter="url(#softGlow)" />
+    
+    <!-- Outer Shield (Height: 68px, y: 9 to 77) -->
+    <path d="M 36 9 L 66 21 C 66 50 51 70 36 77 C 21 70 6 21 Z" fill="url(#shieldGrad)" />
+    
+    <!-- Inner Dark Shield -->
+    <path d="M 36 14 L 61 24 C 61 48 48 65 36 71 C 24 65 11 48 11 24 Z" fill="#090d16" />
+    
+    <!-- Circuit Pulse Line (Centered at y=43) -->
+    <path d="M 23 43 L 30 43 L 33 36 L 38 51 L 41 43 L 49 43" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <circle cx="36" cy="28" r="2.2" fill="#a855f7" />
+    <circle cx="36" cy="59" r="2.2" fill="#10b981" />
+  </g>
+
+  <!-- Typography: "LongGuard" (Adaptive color: dark on light theme, white on dark theme) -->
+  <text class="brand-text" x="96" y="44" font-size="40" font-weight="700" letter-spacing="-0.5" dominant-baseline="central">LongGuard</text>
+</svg>
