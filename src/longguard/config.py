@@ -33,6 +33,20 @@ class GuardConfig:
             Values are strings with template variables in {curly_braces}.
         log_level: Logging level for LongGuard internals.
         emit_events: Whether to emit events for LangSmith / custom callbacks.
+        model: Model identifier used for cost estimation (e.g. ``"gpt-4o"``).
+            When set, LongGuard will look up this model in the built-in pricing
+            table to populate ``estimated_cost_usd`` in the run report.
+        cost_per_input_token: Override price per input token in USD.  When both
+            ``cost_per_input_token`` and ``cost_per_output_token`` are provided,
+            they take precedence over the built-in table.  Useful for models not
+            yet in the table or for custom pricing agreements.
+        cost_per_output_token: Override price per output token in USD.
+        max_cost_usd: Hard dollar-spend cap for the run.  When the estimated
+            cumulative cost reaches this threshold the circuit breaker immediately
+            kills the agent, identical to how ``max_tokens_per_run`` works.
+            Requires either ``model`` (for table lookup) or both
+            ``cost_per_input_token`` + ``cost_per_output_token`` to be set;
+            otherwise the cap is silently skipped.
     """
 
     # Loop detection thresholds
@@ -58,6 +72,12 @@ class GuardConfig:
     log_level: str = "WARNING"
     emit_events: bool = True
 
+    # Cost tracking
+    model: str | None = None
+    cost_per_input_token: float | None = None
+    cost_per_output_token: float | None = None
+    max_cost_usd: float | None = None
+
     def __post_init__(self) -> None:
         """Validate configuration values."""
         if self.tool_repeat_threshold < 1:
@@ -80,6 +100,18 @@ class GuardConfig:
             raise ValueError("max_steps must be >= 1")
         if self.max_reflections < 1:
             raise ValueError("max_reflections must be >= 1")
+        if self.max_cost_usd is not None and self.max_cost_usd <= 0:
+            raise ValueError("max_cost_usd must be > 0")
+        if (self.cost_per_input_token is not None) != (
+            self.cost_per_output_token is not None
+        ):
+            raise ValueError(
+                "cost_per_input_token and cost_per_output_token must be set together"
+            )
+        if self.cost_per_input_token is not None and self.cost_per_input_token < 0:
+            raise ValueError("cost_per_input_token must be >= 0")
+        if self.cost_per_output_token is not None and self.cost_per_output_token < 0:
+            raise ValueError("cost_per_output_token must be >= 0")
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> GuardConfig:

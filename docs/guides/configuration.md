@@ -38,6 +38,12 @@ config = GuardConfig(
     # --- Observability ---
     log_level="WARNING",
     emit_events=True,
+
+    # --- Dollar Cost Tracking (v0.1.3) ---
+    model="gpt-4o",                   # Model identifier for built-in pricing lookup
+    max_cost_usd=0.50,                # Hard-kill when estimated spend hits $0.50
+    # cost_per_input_token=2.5e-6,   # Override: price per input token (USD)
+    # cost_per_output_token=10e-6,   # Override: price per output token (USD)
 )
 ```
 

@@ -4,9 +4,10 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-light.svg">
-    <img alt="LongGuard Logo" src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-dark.svg" width="340">
+    <img alt="LongGuard Logo" src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-light.svg" width="340">
   </picture>
 </p>
+
 
 
 
@@ -20,6 +21,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![LangGraph](https://img.shields.io/badge/LangGraph-1.0%2B-orange.svg)](https://github.com/langchain-ai/langgraph)
 [![LangChain](https://img.shields.io/badge/LangChain-1.0%2B-green.svg)](https://github.com/langchain-ai/langchain)
+[![OpenAI](https://img.shields.io/badge/OpenAI-SDK-412991.svg)](https://github.com/openai/openai-python)
+[![Anthropic](https://img.shields.io/badge/Anthropic-SDK-c75a2b.svg)](https://github.com/anthropic/anthropic-sdk-python)
 
 <p align="center">
   <a href="#quick-start"><strong>⚡ Quick Start</strong></a> &nbsp;·&nbsp;
@@ -67,8 +70,10 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 - 🧭 **Reflect & Pivot prompt injection**: Guides stuck agents back on track before giving up.
 - 🛡️ **Zero unhandled crashes**: Gracefully terminates and preserves conversation state if recovery fails.
 - 🔌 **1-line integration**: Drop-in wrapper for LangGraph 1.0+ (`add_guard_to_graph`) and LangChain (`GuardedAgentExecutor`).
-- 📊 **Full observability**: Generates detailed `GuardReport` summaries with per-step token tracking.
-- 🧪 **100% test coverage**: 179 passing unit/integration tests, strict MyPy typing, and Ruff linted.
+- 🐍 **Raw client support** *(v0.1.3)*: Use LongGuard directly with `openai` or `anthropic` SDK — no LangGraph needed.
+- 💵 **Dollar cost tracking** *(v0.1.3)*: Built-in pricing for 40+ models. Set `max_cost_usd` to hard-kill on budget overrun.
+- 📊 **Full observability**: Detailed `GuardReport` with per-step telemetry. Save to JSON/YAML. Load for offline analysis.
+- 🧪 **255 passing tests**: Strict MyPy typing and Ruff linted across Python 3.10–3.12.
 
 ---
 
@@ -127,7 +132,47 @@ guard = workflow.__longguard__
 print(guard.get_report().summary())
 ```
 
-### 2. Standalone / Custom Agent Loop
+### 2. Raw OpenAI / Anthropic Client (No LangChain needed)
+
+Call LongGuard directly from any `while` loop — works with plain `openai` or `anthropic` SDK:
+
+```python
+import openai
+from longguard import AgentStep, CircuitBreaker, GuardConfig
+
+client = openai.OpenAI()
+breaker = CircuitBreaker(GuardConfig(
+    model="gpt-4o",        # enables dollar-cost tracking
+    max_cost_usd=0.50,     # hard-kill if run exceeds $0.50
+    max_steps=30,
+))
+
+observation = None
+for i in range(1, 31):
+    response = client.chat.completions.create(model="gpt-4o", messages=messages)
+
+    # One-line conversion from SDK response → AgentStep
+    step = AgentStep.from_openai_response(response, step_number=i, observation=observation)
+    decision = breaker.check(step)
+
+    if decision.action == "kill":
+        print(f"⛔ Halted: {decision.reason}")
+        break
+    elif decision.action == "reflect":
+        messages.append({"role": "system", "content": decision.inject_prompt})
+
+    if step.action is None:
+        break  # final answer
+    observation = run_tool(step.action, step.action_input)
+
+# Full run report including estimated cost
+print(breaker.report.summary())
+# → Estimated Cost: $0.0143 USD (gpt-4o)
+```
+
+> For Anthropic: use `AgentStep.from_anthropic_response(response, step_number=i)` — same API, zero dependencies.
+
+### 3. Standalone / Custom Agent Loop
 
 If you run a custom `while` loop or proprietary agent orchestrator:
 
@@ -205,6 +250,12 @@ config = GuardConfig(
     max_tokens_per_run=50_000,        # Hard stop if agent burns > 50k tokens
     max_steps=30,                     # Maximum steps permitted
     max_reflections=2,                # Maximum recovery attempts before kill
+
+    # Dollar Cost Tracking (v0.1.3)
+    model="gpt-4o",                   # Enables built-in cost estimation
+    max_cost_usd=0.50,                # Hard-kill if run exceeds $0.50
+    # cost_per_input_token=2.5e-6,    # Override for unlisted models (USD/token)
+    # cost_per_output_token=10e-6,
 )
 ```
 
@@ -217,7 +268,7 @@ config = GuardConfig(
 Run the test suite locally with `uv` or `pytest`:
 
 ```bash
-# Run all 179 unit & integration tests
+# Run all 255 unit & integration tests
 uv run pytest tests/ -v
 
 # Run with coverage report

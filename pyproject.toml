@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "longguard"
-version = "0.1.2"
+version = "0.1.3"
 description = "Circuit breaker middleware for LangGraph/LangChain agents — detect loops, inject Reflect & Pivot, prevent runaway costs"
 readme = "README.md"
 license = "MIT"

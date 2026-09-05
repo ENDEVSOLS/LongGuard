@@ -41,7 +41,7 @@ LangChain integration::
     result = guarded.run("Your query here")
 """
 
-__version__ = "0.1.1"
+__version__ = "0.1.3"
 
 from typing import Any
 
@@ -61,6 +61,7 @@ from .core.detectors import (
 from .core.pivot import PIVOT_TEMPLATES, ReflectAndPivotInjector
 from .core.reporter import GuardReport
 from .core.step import AgentStep
+from .pricing import PRICING_TABLE, compute_cost, list_supported_models
 
 # --- Lazy integration imports ---
 # These are optional and depend on langgraph / langchain being installed.
@@ -117,6 +118,10 @@ __all__ = [
     "PIVOT_TEMPLATES",
     # Reporting
     "GuardReport",
+    # Pricing
+    "PRICING_TABLE",
+    "compute_cost",
+    "list_supported_models",
     # Integrations (lazy-loaded)
     "LongGuard",
     "add_guard_to_graph",

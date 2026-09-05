@@ -62,6 +62,7 @@ nav:
   - Integrations:
       - LangGraph (1-Line): integrations/langgraph.md
       - LangChain: integrations/langchain.md
+      - Raw OpenAI & Anthropic: integrations/raw-client.md
   - Guides:
       - Configuration: guides/configuration.md
       - GuardReport & Telemetry: guides/reporting.md

@@ -10,6 +10,7 @@ from enum import Enum
 from typing import Any
 
 from ..config import GuardConfig
+from ..pricing import compute_cost
 from .detectors.base import AbstractLoopDetector, DetectionResult
 from .detectors.dead_end import DeadEndDriftDetector
 from .detectors.semantic_osc import Embedder, SemanticOscillationDetector
@@ -119,7 +120,8 @@ class CircuitBreaker:
         self._reflection_count = 0
         self._total_tokens = 0
         self._total_steps = 0
-        self._report = GuardReport()
+        self._cost_usd: float | None = None
+        self._report = GuardReport(model=self.config.model)
         self._lock = threading.Lock()
 
         # Event debouncing: minimum interval between events of the same type
@@ -223,7 +225,51 @@ class CircuitBreaker:
         # Record the step in the report
         self._total_tokens += step.tokens_used
         self._total_steps += 1
-        self._report.record_step(step, self._total_tokens, self._total_steps)
+
+        # --- Cost tracking ---
+        # We split the step's token usage evenly between input and output as a
+        # best-effort estimate when the step doesn't carry separate counts.
+        # Integrations that track input/output separately can set those fields
+        # on AgentStep in the future; for now this gives a reasonable estimate.
+        half = step.tokens_used // 2
+        step_cost = compute_cost(
+            model=self.config.model,
+            input_tokens=half,
+            output_tokens=step.tokens_used - half,
+            cost_per_input_token=self.config.cost_per_input_token,
+            cost_per_output_token=self.config.cost_per_output_token,
+        )
+        if step_cost is not None:
+            self._cost_usd = (self._cost_usd or 0.0) + step_cost
+
+        self._report.record_step(
+            step, self._total_tokens, self._total_steps, cost_delta=step_cost
+        )
+
+        # === Hard caps ===
+
+        # Dollar budget exceeded
+        if (
+            self.config.max_cost_usd is not None
+            and self._cost_usd is not None
+            and self._cost_usd >= self.config.max_cost_usd
+        ):
+            reason = (
+                f"cost_budget_exceeded: ${self._cost_usd:.4f} >= "
+                f"${self.config.max_cost_usd:.4f}"
+            )
+            self.state = BreakerState.OPEN
+            self._report.finalize(self.state, kill_reason=reason)
+            self._emit_event("kill", {
+                "reason": reason,
+                "estimated_cost_usd": self._cost_usd,
+                "max_cost_usd": self.config.max_cost_usd,
+            })
+            return BreakerDecision(
+                action="kill",
+                reason=reason,
+                report=self._report,
+            )
 
         # === Hard caps ===
 
@@ -448,7 +494,8 @@ class CircuitBreaker:
             self._reflection_count = 0
             self._total_tokens = 0
             self._total_steps = 0
-            self._report = GuardReport()
+            self._cost_usd = None
+            self._report = GuardReport(model=self.config.model)
             self._last_event_times.clear()
             for detector in self.detectors:
                 detector.reset()

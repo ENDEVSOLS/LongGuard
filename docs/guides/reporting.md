@@ -31,6 +31,7 @@ Total Tokens: 1,842
 Final State: open
 Detections: 2
 Reflections Injected: 1
+Estimated Cost: $0.0184 USD (gpt-4o)
 Kill Reason: reflection_failed: tool_repeat (confidence: 100%)
 
 Detection Details:
@@ -49,11 +50,32 @@ data = report.to_dict()
 # {
 #   "total_steps": 5,
 #   "total_tokens": 1842,
+#   "estimated_cost_usd": 0.0184,
+#   "model": "gpt-4o",
 #   "final_state": "open",
 #   "kill_reason": "reflection_failed: tool_repeat...",
 #   "detections": [...],
 #   "step_timeline": [...]
 # }
+```
+
+---
+
+## Saving & Loading Reports *(v0.1.3)*
+
+Persist run telemetry to disk for CI artifacts, post-mortem debugging, or dashboards:
+
+```python
+# Save to JSON (zero extra dependencies)
+report.save("run_report.json")
+
+# Save to YAML (requires: pip install pyyaml)
+report.save("run_report.yaml")
+
+# Load a saved report back for analysis
+from longguard import GuardReport
+loaded = GuardReport.load("run_report.json")
+print(loaded.summary())
 ```
 
 ---

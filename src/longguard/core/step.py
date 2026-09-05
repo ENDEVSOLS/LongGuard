@@ -100,6 +100,169 @@ class AgentStep:
         }
 
     @classmethod
+    def from_openai_response(
+        cls,
+        response: Any,
+        step_number: int,
+        *,
+        observation: str | None = None,
+        latency_ms: float = 0.0,
+    ) -> AgentStep:
+        """Create an AgentStep from a raw OpenAI chat completion response object.
+
+        Works with any object that follows the OpenAI Python SDK response shape,
+        including ``openai.types.chat.ChatCompletion``.  No ``openai`` package
+        import is required — duck-typing is used throughout.
+
+        Args:
+            response: A raw OpenAI ``ChatCompletion`` response object.
+            step_number: Sequential step index (1-based).
+            observation: Tool observation from the *previous* step, if any.
+            latency_ms: Wall-clock time for this step in milliseconds.
+
+        Returns:
+            An :class:`AgentStep` populated from the response.
+
+        Example::
+
+            import openai
+            from longguard import AgentStep, CircuitBreaker, GuardConfig
+
+            client = openai.OpenAI()
+            breaker = CircuitBreaker(GuardConfig(model="gpt-4o"))
+
+            for i in range(1, 31):
+                response = client.chat.completions.create(...)
+                step = AgentStep.from_openai_response(response, step_number=i)
+                decision = breaker.check(step)
+                if decision.action == "kill":
+                    break
+        """
+        choice = response.choices[0]
+        message = choice.message
+
+        # --- Thought: extract text content ---
+        content = message.content or ""
+        if not isinstance(content, str):
+            # Multimodal: concatenate text parts
+            text_parts = [
+                part.text
+                for part in content
+                if hasattr(part, "type") and part.type == "text" and hasattr(part, "text")
+            ]
+            content = " ".join(text_parts)
+
+        # --- Action: first tool call (if any) ---
+        action: str | None = None
+        action_input: Any | None = None
+        tool_calls = getattr(message, "tool_calls", None) or []
+        if tool_calls:
+            first = tool_calls[0]
+            fn = getattr(first, "function", None)
+            if fn is not None:
+                action = getattr(fn, "name", None)
+                raw_args = getattr(fn, "arguments", None)
+                if raw_args:
+                    try:
+                        import json as _json
+                        action_input = _json.loads(raw_args)
+                    except Exception:
+                        action_input = raw_args
+
+        # --- Token usage ---
+        tokens_used = 0
+        usage = getattr(response, "usage", None)
+        if usage is not None:
+            tokens_used = getattr(usage, "total_tokens", 0) or 0
+
+        return cls(
+            step_number=step_number,
+            thought=content,
+            action=action,
+            action_input=action_input,
+            observation=observation,
+            tokens_used=tokens_used,
+            latency_ms=latency_ms,
+        )
+
+    @classmethod
+    def from_anthropic_response(
+        cls,
+        response: Any,
+        step_number: int,
+        *,
+        observation: str | None = None,
+        latency_ms: float = 0.0,
+    ) -> AgentStep:
+        """Create an AgentStep from a raw Anthropic Messages API response object.
+
+        Works with any object that follows the Anthropic Python SDK response shape,
+        including ``anthropic.types.Message``.  No ``anthropic`` package import
+        is required — duck-typing is used throughout.
+
+        Args:
+            response: A raw Anthropic ``Message`` response object.
+            step_number: Sequential step index (1-based).
+            observation: Tool observation from the *previous* step, if any.
+            latency_ms: Wall-clock time for this step in milliseconds.
+
+        Returns:
+            An :class:`AgentStep` populated from the response.
+
+        Example::
+
+            import anthropic
+            from longguard import AgentStep, CircuitBreaker, GuardConfig
+
+            client = anthropic.Anthropic()
+            breaker = CircuitBreaker(GuardConfig(model="claude-3-5-sonnet"))
+
+            for i in range(1, 31):
+                response = client.messages.create(...)
+                step = AgentStep.from_anthropic_response(response, step_number=i)
+                decision = breaker.check(step)
+                if decision.action == "kill":
+                    break
+        """
+        content_blocks = getattr(response, "content", []) or []
+
+        # --- Thought: collect all text blocks ---
+        thought_parts: list[str] = []
+        action: str | None = None
+        action_input: Any | None = None
+
+        for block in content_blocks:
+            block_type = getattr(block, "type", None)
+            if block_type == "text":
+                text = getattr(block, "text", "") or ""
+                if text:
+                    thought_parts.append(text)
+            elif block_type == "tool_use" and action is None:
+                # First tool_use block wins
+                action = getattr(block, "name", None)
+                action_input = getattr(block, "input", None)
+
+        thought = " ".join(thought_parts)
+
+        # --- Token usage ---
+        tokens_used = 0
+        usage = getattr(response, "usage", None)
+        if usage is not None:
+            input_toks = getattr(usage, "input_tokens", 0) or 0
+            output_toks = getattr(usage, "output_tokens", 0) or 0
+            tokens_used = input_toks + output_toks
+
+        return cls(
+            step_number=step_number,
+            thought=thought,
+            action=action,
+            action_input=action_input,
+            observation=observation,
+            tokens_used=tokens_used,
+            latency_ms=latency_ms,
+        )
+
+    @classmethod
     def from_dict(cls, data: dict[str, Any]) -> AgentStep:
         """Deserialize a step from a dictionary.
 
