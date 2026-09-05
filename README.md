@@ -14,7 +14,7 @@
 **In-flight circuit breaker & reasoning loop recovery for LangGraph & LangChain agents**
 
 [![PyPI version](https://img.shields.io/pypi/v/longguard.svg?color=blue)](https://pypi.org/project/longguard/)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/longguard?period=total&units=international_system&left_color=black&right_color=green&left_text=downloads)](https://pepy.tech/projects/longguard)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/longguard.svg?color=blue&label=downloads)](https://pypi.org/project/longguard/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/longguard.svg)](https://pypi.org/project/longguard/)
 [![CI](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/ci.yml)
 [![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://endevsols.github.io/LongGuard/)
@@ -25,18 +25,20 @@
 [![Anthropic](https://img.shields.io/badge/Anthropic-SDK-c75a2b.svg)](https://github.com/anthropic/anthropic-sdk-python)
 
 <p align="center">
-  <a href="#quick-start"><strong>⚡ Quick Start</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/getting-started/"><strong>⚡ Quick Start</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/"><strong>📖 Documentation</strong></a> &nbsp;·&nbsp;
-  <a href="#why-longguard"><strong>Why LongGuard?</strong></a> &nbsp;·&nbsp;
-  <a href="#part-of-the-long-suite"><strong>🌐 Part of Long Suite</strong></a> &nbsp;·&nbsp;
-  <a href="#the-4-loop-detectors"><strong>Loop Detectors</strong></a> &nbsp;·&nbsp;
-  <a href="#cicd-ready"><strong>CI/CD Ready</strong></a>
+  <a href="https://endevsols.github.io/LongGuard/concepts/how-it-works/"><strong>💡 How It Works</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/concepts/detectors/"><strong>🔍 Loop Detectors</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/integrations/raw-client/"><strong>🐍 Raw Clients</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/changelog/"><strong>📜 Changelog</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.com/open-source"><strong>🌐 Long Suite</strong></a>
 </p>
 
 </div>
 
 ---
 
+<a id="overview"></a>
 ## Overview
 
 > *"Why did my agent just burn $14 repeating the exact same search 20 times?"* — now you have an in-flight circuit breaker that detects loops and recovers gracefully.
@@ -49,6 +51,7 @@ LangGraph's built-in `recursion_limit` is a **hard crash** (`GraphRecursionError
 
 ---
 
+<a id="part-of-the-long-suite"></a>
 ## 🌐 Part of the Long Suite
 
 LongGuard is part of the **[EnDevSols Long Suite](https://endevsols.com/open-source)** of open-source production AI tools:
@@ -63,6 +66,7 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 
 ---
 
+<a id="why-longguard"></a>
 ## 💡 Why LongGuard?
 
 - ⚡ **Sub-millisecond overhead**: Evaluates in-flight agent steps without slowing down LLM inference.
@@ -77,6 +81,7 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 
 ---
 
+<a id="architecture"></a>
 ## 🏗️ Architecture
 
 <p align="center">
@@ -85,7 +90,7 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 
 ---
 
-
+<a id="quick-start"></a>
 ## ⚡ Quick Start
 
 ### Installation
@@ -207,6 +212,8 @@ print(breaker.report.summary())
 
 ---
 
+<a id="loop-detectors"></a>
+<a id="the-4-loop-detectors"></a>
 ## 🔍 The 4 Loop Detectors
 
 | Detector | What It Catches | Real-World Example |
@@ -218,6 +225,7 @@ print(breaker.report.summary())
 
 ---
 
+<a id="comparison"></a>
 ## 📊 LongGuard vs. LangGraph `recursion_limit`
 
 | Capability | LangGraph `recursion_limit` | LongGuard 🛡️ |
@@ -232,6 +240,7 @@ print(breaker.report.summary())
 
 ---
 
+<a id="configuration"></a>
 ## ⚙️ Configuration at a Glance
 
 All behavior is customizable through `GuardConfig`:
@@ -263,6 +272,7 @@ config = GuardConfig(
 
 ---
 
+<a id="cicd-ready"></a>
 ## 🧪 CI/CD Ready
 
 Run the test suite locally with `uv` or `pytest`:

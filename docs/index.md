@@ -3,10 +3,11 @@
 **The Chain-of-Thought Circuit Breaker for LangGraph and LangChain Agents.**
 
 [![PyPI version](https://img.shields.io/pypi/v/longguard.svg?color=blue)](https://pypi.org/project/longguard/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/longguard.svg?color=blue&label=downloads)](https://pypi.org/project/longguard/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests: 179 passing](https://img.shields.io/badge/tests-179%20passing-brightgreen.svg)]()
-[![Coverage: 90%](https://img.shields.io/badge/coverage-90%25-green.svg)]()
+[![Tests: 255 passing](https://img.shields.io/badge/tests-255%20passing-brightgreen.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/ci.yml)
+[![Coverage: 90%](https://img.shields.io/badge/coverage-90%25-green.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/ci.yml)
 
 ---
 
