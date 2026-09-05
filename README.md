@@ -1,8 +1,13 @@
 <div align="center">
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo.svg" alt="LongGuard Logo" width="340"/>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-light.svg">
+    <img alt="LongGuard Logo" src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-dark.svg" width="340">
+  </picture>
 </p>
+
 
 
 **In-flight circuit breaker & reasoning loop recovery for LangGraph & LangChain agents**

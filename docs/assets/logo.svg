@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 86" width="100%" height="100%" style="background: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <style>
+    .brand-text { fill: #0f172a; }
+    @media (prefers-color-scheme: dark) {
+      .brand-text { fill: #ffffff; }
+    }
+  </style>
+
   <defs>
     <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#3b82f6" />
@@ -28,6 +35,6 @@
     <circle cx="36" cy="59" r="2.2" fill="#10b981" />
   </g>
 
-  <!-- Typography: "LongGuard" (Dominant Baseline Centered at y=43) -->
-  <text x="96" y="44" fill="#ffffff" font-size="40" font-weight="700" letter-spacing="-0.5" dominant-baseline="central">LongGuard</text>
+  <!-- Typography: "LongGuard" (Adaptive color: dark on light theme, white on dark theme) -->
+  <text class="brand-text" x="96" y="44" font-size="40" font-weight="700" letter-spacing="-0.5" dominant-baseline="central">LongGuard</text>
 </svg>
