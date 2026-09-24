@@ -1,5 +1,6 @@
 """Integration adapters for popular agent frameworks."""
 
+from .crewai import CrewGuard, add_guard_to_crew
 from .langchain import GuardedAgentExecutor, GuardTerminatedException
 from .langgraph import LongGuard, add_guard_to_graph
 from .strands import GuardTerminatedError, StrandsGuard
@@ -11,4 +12,7 @@ __all__ = [
     "GuardTerminatedException",
     "StrandsGuard",
     "GuardTerminatedError",
+    "CrewGuard",
+    "add_guard_to_crew",
 ]
+

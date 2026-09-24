@@ -11,6 +11,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.4] - 2026-09-24
+
+### 🚀 Added
+- **CrewAI Integration (`CrewGuard` & `add_guard_to_crew`)**: Added native CrewAI support in `longguard.integrations.crewai`. Protects multi-agent crews from delegation loops and repetitive tool calls via `step_callback` and 1-line `add_guard_to_crew(crew)`.
+- **Universal `@guarded` Decorator**: Added `@guarded` decorator in `longguard.core.decorator` (exported top-level as `longguard.guarded`). Wraps arbitrary Python functions, SDK calls, generators, and async coroutines with circuit breaker protection in 1 line.
+- **PEP 561 Typing Support (`py.typed`)**: Added `src/longguard/py.typed` marker file and `Typing :: Typed` package classifier for strict IDE and static analysis support (MyPy, Pyright, VS Code Pylance).
+- **CircuitBreakerTrippedError / CircuitBreakerError**: Added explicit exception classes carrying `reason`, `report`, and `decision` for programmatic inspection when an agent is terminated.
+- **Documentation & Theme Polish**: Enhanced MkDocs configuration with logo, favicon, GitHub repository icon, back-to-top navigation, tab synchronization, social footer, and new documentation guides for CrewAI and the `@guarded` decorator.
+
+### 🔄 Changed
+- **PyPI Metadata & SEO Optimization**: Updated official documentation URL to `https://endevsols.github.io/LongGuard/`, expanded keywords to 15 high-intent discovery tags, and added `Operating System :: OS Independent` and `Topic :: System :: Monitoring` classifiers.
+- **README Links**: Converted relative markdown links to absolute GitHub URLs to prevent 404 errors when rendered on PyPI.
+- **Expanded Test Suite**: Added 16 new test cases (271 tests total, 100% passing) covering `@guarded` (sync, async, generators, cost limits, fallbacks) and `CrewGuard` (action/finish parsing, crew wrapping, callback chaining).
+
+---
+
 ## [0.1.3] - 2026-09-05
 
 ### 🚀 Added

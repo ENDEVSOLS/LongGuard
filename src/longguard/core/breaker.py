@@ -85,6 +85,29 @@ class BreakerDecision:
         return self.action != "kill"
 
 
+class CircuitBreakerTrippedError(RuntimeError):
+    """Raised when the CircuitBreaker terminates execution (action == 'kill').
+
+    Attributes:
+        reason: Human-readable reason for termination.
+        report: GuardReport snapshot at the time of tripping.
+        decision: The BreakerDecision that triggered the trip.
+    """
+
+    def __init__(
+        self,
+        reason: str,
+        report: GuardReport | None = None,
+        decision: BreakerDecision | None = None,
+    ) -> None:
+        self.reason = reason
+        self.report = report
+        self.decision = decision
+        super().__init__(f"Circuit breaker tripped: {reason}")
+
+
+CircuitBreakerError = CircuitBreakerTrippedError
+
 # Type for event callbacks
 EventCallback = Callable[[str, dict[str, Any]], None]
 

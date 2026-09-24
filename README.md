@@ -21,17 +21,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![LangGraph](https://img.shields.io/badge/LangGraph-1.0%2B-orange.svg)](https://github.com/langchain-ai/langgraph)
 [![LangChain](https://img.shields.io/badge/LangChain-1.0%2B-green.svg)](https://github.com/langchain-ai/langchain)
+[![CrewAI](https://img.shields.io/badge/CrewAI-Supported-purple.svg)](https://github.com/crewAIInc/crewAI)
 [![OpenAI](https://img.shields.io/badge/OpenAI-SDK-412991.svg)](https://github.com/openai/openai-python)
 [![Anthropic](https://img.shields.io/badge/Anthropic-SDK-c75a2b.svg)](https://github.com/anthropic/anthropic-sdk-python)
 
 <p align="center">
   <a href="https://endevsols.github.io/LongGuard/getting-started/"><strong>⚡ Quick Start</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/"><strong>📖 Documentation</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/integrations/crewai/"><strong>👥 CrewAI</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/guides/decorator/"><strong>🪄 @guarded</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/concepts/how-it-works/"><strong>💡 How It Works</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/concepts/detectors/"><strong>🔍 Loop Detectors</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/integrations/raw-client/"><strong>🐍 Raw Clients</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/changelog/"><strong>📜 Changelog</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.com/open-source"><strong>🌐 Long Suite</strong></a>
+  <a href="https://endevsols.github.io/LongGuard/changelog/"><strong>📜 Changelog</strong></a>
 </p>
 
 </div>
@@ -73,11 +75,11 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 - 🔄 **4 loop detectors**: Catches tool repetition, semantic oscillation, dead-end drift, and token velocity spikes.
 - 🧭 **Reflect & Pivot prompt injection**: Guides stuck agents back on track before giving up.
 - 🛡️ **Zero unhandled crashes**: Gracefully terminates and preserves conversation state if recovery fails.
-- 🔌 **1-line integration**: Drop-in wrapper for LangGraph 1.0+ (`add_guard_to_graph`) and LangChain (`GuardedAgentExecutor`).
-- 🐍 **Raw client support** *(v0.1.3)*: Use LongGuard directly with `openai` or `anthropic` SDK — no LangGraph needed.
-- 💵 **Dollar cost tracking** *(v0.1.3)*: Built-in pricing for 40+ models. Set `max_cost_usd` to hard-kill on budget overrun.
+- 🔌 **1-line framework integrations**: Drop-in wrapper for LangGraph 1.0+ (`add_guard_to_graph`), LangChain (`GuardedAgentExecutor`), and CrewAI (`add_guard_to_crew`).
+- 🪄 **Universal `@guarded` decorator**: 1-line protection for arbitrary Python functions, generators, and async loops.
+- 🐍 **Raw client support**: Use LongGuard directly with `openai` or `anthropic` SDK — no framework needed.
+- 💵 **Dollar cost tracking**: Built-in pricing for 40+ models. Set `max_cost_usd` to hard-kill on budget overrun.
 - 📊 **Full observability**: Detailed `GuardReport` with per-step telemetry. Save to JSON/YAML. Load for offline analysis.
-- 🧪 **255 passing tests**: Strict MyPy typing and Ruff linted across Python 3.10–3.12.
 
 ---
 
@@ -104,6 +106,9 @@ pip install longguard[langgraph]
 
 # With LangChain integration
 pip install longguard[langchain]
+
+# With CrewAI integration
+pip install longguard[crewai]
 
 # With high-quality sentence embeddings
 pip install longguard[embeddings]
@@ -137,7 +142,38 @@ guard = workflow.__longguard__
 print(guard.get_report().summary())
 ```
 
-### 2. Raw OpenAI / Anthropic Client (No LangChain needed)
+### 2. CrewAI Integration (1 Line)
+
+Protect multi-agent crews from delegation loops and repetitive tool calls:
+
+```python
+from crewai import Crew
+from longguard import GuardConfig
+from longguard.integrations.crewai import add_guard_to_crew
+
+crew = Crew(agents=[researcher, writer], tasks=[task1, task2])
+crew = add_guard_to_crew(crew, GuardConfig(model="gpt-4o", max_cost_usd=1.00))
+result = crew.kickoff()
+
+print(crew.__longguard__.summary())
+```
+
+### 3. Universal `@guarded` Decorator
+
+Add circuit breaking to any custom agent function or LLM call:
+
+```python
+from longguard import guarded
+
+@guarded(max_cost_usd=0.50, tool_repeat_threshold=3)
+def run_agent_step(thought: str, action: str, action_input: dict, observation: str):
+    return execute_tool(action, action_input)
+
+# Check execution report at any time:
+print(run_agent_step.report.summary())
+```
+
+### 4. Raw OpenAI / Anthropic Client (No Framework Needed)
 
 Call LongGuard directly from any `while` loop — works with plain `openai` or `anthropic` SDK:
 
@@ -177,7 +213,7 @@ print(breaker.report.summary())
 
 > For Anthropic: use `AgentStep.from_anthropic_response(response, step_number=i)` — same API, zero dependencies.
 
-### 3. Standalone / Custom Agent Loop
+### 5. Standalone / Custom Agent Loop
 
 If you run a custom `while` loop or proprietary agent orchestrator:
 
@@ -295,13 +331,12 @@ Every push and pull request is automatically tested across **Python 3.10, 3.11, 
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on code formatting, running tests, and opening pull requests.
+Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/ENDEVSOLS/LongGuard/blob/main/CONTRIBUTING.md) for guidelines on code formatting, running tests, and opening pull requests.
 
 ## 🛡️ Security
 
-For vulnerability disclosures, please review [SECURITY.md](SECURITY.md) or contact technology@endevsols.com.
+For vulnerability disclosures, please review [SECURITY.md](https://github.com/ENDEVSOLS/LongGuard/blob/main/SECURITY.md) or contact technology@endevsols.com.
 
 ## 📄 License
 
-
-LongGuard is open-source software released under the [MIT License](LICENSE).
+LongGuard is open-source software released under the [MIT License](https://github.com/ENDEVSOLS/LongGuard/blob/main/LICENSE).

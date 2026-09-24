@@ -88,6 +88,11 @@ class GuardReport:
     estimated_cost_usd: float | None = None
     model: str | None = None
 
+    @property
+    def steps(self) -> list[dict[str, Any]]:
+        """Convenience alias for step_timeline."""
+        return self.step_timeline
+
     def record_step(
         self,
         step: AgentStep,

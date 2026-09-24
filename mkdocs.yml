@@ -10,6 +10,10 @@ copyright: Copyright &copy; 2026 EnDevSols
 
 theme:
   name: material
+  logo: assets/logo-light.svg
+  favicon: assets/logo-light.svg
+  icon:
+    repo: fontawesome/brands/github
   palette:
     # Light mode
     - media: "(prefers-color-scheme: light)"
@@ -32,10 +36,29 @@ theme:
     - navigation.tracking
     - navigation.sections
     - navigation.expand
+    - navigation.top
     - content.code.copy
     - content.code.annotate
+    - content.tabs.link
+    - toc.follow
     - search.suggest
     - search.highlight
+    - search.share
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ENDEVSOLS/LongGuard
+      name: GitHub
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/longguard/
+      name: PyPI
+    - icon: fontawesome/solid/globe
+      link: https://endevsols.com/open-source
+      name: EnDevSols Long Suite
+    - icon: fontawesome/brands/x-twitter
+      link: https://twitter.com/endevsols
+      name: Twitter / X
 
 markdown_extensions:
   - admonition
@@ -62,8 +85,10 @@ nav:
   - Integrations:
       - LangGraph (1-Line): integrations/langgraph.md
       - LangChain: integrations/langchain.md
+      - CrewAI: integrations/crewai.md
       - Raw OpenAI & Anthropic: integrations/raw-client.md
   - Guides:
+      - Universal @guarded Decorator: guides/decorator.md
       - Configuration: guides/configuration.md
       - GuardReport & Telemetry: guides/reporting.md
   - Contributing: contributing.md

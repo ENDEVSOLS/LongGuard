@@ -4,12 +4,28 @@ build-backend = "hatchling.build"
 
 [project]
 name = "longguard"
-version = "0.1.3"
+version = "0.1.4"
 description = "Circuit breaker middleware for LangGraph/LangChain agents — detect loops, inject Reflect & Pivot, prevent runaway costs"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
-keywords = ["langchain", "langgraph", "agents", "circuit-breaker", "llm", "cost-control", "loop-detection"]
+keywords = [
+    "langchain",
+    "langgraph",
+    "crewai",
+    "agents",
+    "ai-agents",
+    "circuit-breaker",
+    "ai-safety",
+    "agentic-ai",
+    "guardrails",
+    "cost-control",
+    "cost-optimization",
+    "loop-detection",
+    "openai",
+    "anthropic",
+    "observability",
+]
 authors = [
     { name = "EnDevSols", email = "technology@endevsols.com" },
 ]
@@ -18,12 +34,15 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Monitoring",
+    "Typing :: Typed",
 ]
 dependencies = [
     "numpy>=1.24.0",
@@ -33,7 +52,7 @@ dependencies = [
 Homepage = "https://github.com/ENDEVSOLS/LongGuard"
 Repository = "https://github.com/ENDEVSOLS/LongGuard"
 Issues = "https://github.com/ENDEVSOLS/LongGuard/issues"
-Documentation = "https://github.com/ENDEVSOLS/LongGuard#readme"
+Documentation = "https://endevsols.github.io/LongGuard/"
 
 [project.optional-dependencies]
 langgraph = [
@@ -44,6 +63,9 @@ langchain = [
     "langchain>=1.0.0",
     "langchain-core>=1.0.0",
 ]
+crewai = [
+    "crewai>=0.28.0",
+]
 embeddings = [
     "sentence-transformers>=2.7.0",
 ]
@@ -53,7 +75,7 @@ docs = [
     "pymdown-extensions>=10.7",
 ]
 all = [
-    "longguard[langgraph,langchain,embeddings,docs]",
+    "longguard[langgraph,langchain,crewai,embeddings,docs]",
 ]
 dev = [
     "pytest>=8.0.0",

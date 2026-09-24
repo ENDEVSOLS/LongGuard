@@ -41,12 +41,19 @@ LangChain integration::
     result = guarded.run("Your query here")
 """
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 from typing import Any
 
 from .config import GuardConfig
-from .core.breaker import BreakerDecision, BreakerState, CircuitBreaker
+from .core.breaker import (
+    BreakerDecision,
+    BreakerState,
+    CircuitBreaker,
+    CircuitBreakerError,
+    CircuitBreakerTrippedError,
+)
+from .core.decorator import guarded
 from .core.detectors import (
     AbstractLoopDetector,
     DeadEndDriftDetector,
@@ -64,7 +71,7 @@ from .core.step import AgentStep
 from .pricing import PRICING_TABLE, compute_cost, list_supported_models
 
 # --- Lazy integration imports ---
-# These are optional and depend on langgraph / langchain being installed.
+# These are optional and depend on langgraph / langchain / crewai being installed.
 # Users who only use the core API should not need those packages.
 
 def __getattr__(name: str) -> Any:
@@ -72,6 +79,7 @@ def __getattr__(name: str) -> Any:
     _langgraph_names = {"LongGuard", "add_guard_to_graph"}
     _langchain_names = {"GuardedAgentExecutor", "GuardTerminatedException"}
     _strands_names = {"StrandsGuard", "GuardTerminatedError"}
+    _crewai_names = {"CrewGuard", "add_guard_to_crew"}
 
     if name in _langgraph_names:
         from .integrations.langgraph import LongGuard, add_guard_to_graph
@@ -91,6 +99,13 @@ def __getattr__(name: str) -> Any:
             "GuardTerminatedError": GuardTerminatedError,
         }[name]
 
+    if name in _crewai_names:
+        from .integrations.crewai import CrewGuard, add_guard_to_crew
+        return {
+            "CrewGuard": CrewGuard,
+            "add_guard_to_crew": add_guard_to_crew,
+        }[name]
+
     raise AttributeError(f"module 'longguard' has no attribute {name!r}")
 
 
@@ -99,6 +114,8 @@ __all__ = [
     "GuardConfig",
     # Core models
     "AgentStep",
+    # Decorator
+    "guarded",
     # Detectors
     "AbstractLoopDetector",
     "DetectionResult",
@@ -111,6 +128,8 @@ __all__ = [
     "SentenceTransformerEmbedder",
     # Circuit breaker
     "CircuitBreaker",
+    "CircuitBreakerError",
+    "CircuitBreakerTrippedError",
     "BreakerState",
     "BreakerDecision",
     # Pivot
@@ -129,4 +148,6 @@ __all__ = [
     "GuardTerminatedException",
     "StrandsGuard",
     "GuardTerminatedError",
+    "CrewGuard",
+    "add_guard_to_crew",
 ]
