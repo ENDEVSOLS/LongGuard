@@ -10,8 +10,8 @@ copyright: Copyright &copy; 2026 EnDevSols
 
 theme:
   name: material
-  logo: assets/logo-light.svg
-  favicon: assets/logo-light.svg
+  logo: assets/icon.svg
+  favicon: assets/icon.svg
   icon:
     repo: fontawesome/brands/github
   palette:
