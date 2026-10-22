@@ -2096,7 +2096,7 @@ wheels = [
 
 [[package]]
 name = "longguard"
-version = "0.2.0.dev0"
+version = "0.2.0.dev3"
 source = { editable = "." }
 dependencies = [
     { name = "numpy" },
