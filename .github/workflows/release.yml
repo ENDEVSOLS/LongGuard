@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing version tag to release (for example v0.2.0rc1)"
+        description: "Existing version tag to release (for example v0.2.0 or v0.2.0rc1)"
         required: true
 
 permissions:
@@ -41,6 +41,8 @@ jobs:
         env:
           UV_CACHE_DIR: /tmp/longguard-uv-cache
         run: uv run --no-sync python scripts/verify_release.py
+      - name: Build distribution packages
+        run: uv build
       - name: Generate literal release notes
         id: notes
         env:

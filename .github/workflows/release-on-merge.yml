@@ -60,6 +60,13 @@ jobs:
                 pr.base.repo.full_name.toLowerCase() !== `${owner}/${repo}`.toLowerCase()) {
               throw new Error('Only PRs merged into this repository main branch can release');
             }
+
+            // Check if the PR has a 'release' label for stable release
+            const labels = (pr.labels || []).map(l => (typeof l === 'string' ? l : (l.name || '')).toLowerCase());
+            const isStable = labels.includes('release');
+            core.setOutput('stable', isStable ? 'true' : 'false');
+            core.info(`Release mode: ${isStable ? 'STABLE' : 'dev'}`);
+
             require('fs').writeFileSync(
               `${process.env.RUNNER_TEMP}/release-pr.json`, JSON.stringify({ pull_request: pr })
             );
@@ -77,6 +84,8 @@ jobs:
       - name: Prepare versioned release source
         id: prepare
         if: steps.pr.outputs.sha != ''
+        env:
+          RELEASE_STABLE: ${{ steps.pr.outputs.stable }}
         run: GITHUB_EVENT_PATH="$RUNNER_TEMP/release-pr.json" python scripts/prepare_merge_release.py
       - name: Push release tag
         if: steps.pr.outputs.sha != ''
