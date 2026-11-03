@@ -62,7 +62,7 @@ jobs:
         run: uv sync --locked --python 3.12 --extra dev --extra langgraph --extra langchain --extra crewai
       - name: Exercise newest compatible frameworks without changing the lockfile
         if: matrix.dependencies == 'newest'
-        run: uv pip install --upgrade 'langgraph>=1.0.0' 'langchain>=1.0.0' 'crewai>=0.28.0'
+        run: uv pip install --upgrade 'langgraph>=1.0.0' 'langchain>=1.0.0' 'crewai>=0.28.0,<1.15.34'
       - name: Require framework presence
         run: >-
           uv run --no-sync python -c "from importlib.metadata import version; print({n: version(n) for n in ('langgraph', 'langchain', 'crewai')})"
