@@ -50,8 +50,10 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/ENDEVSOLS/LongGuard"
 Repository = "https://github.com/ENDEVSOLS/LongGuard"
-Issues = "https://github.com/ENDEVSOLS/LongGuard/issues"
 Documentation = "https://endevsols.github.io/LongGuard/"
+Changelog = "https://github.com/ENDEVSOLS/LongGuard/blob/main/CHANGELOG.md"
+Issues = "https://github.com/ENDEVSOLS/LongGuard/issues"
+Discussions = "https://github.com/ENDEVSOLS/LongGuard/discussions"
 
 [project.optional-dependencies]
 langgraph = [

@@ -61,7 +61,7 @@ data = report.to_dict()
 
 ---
 
-## Saving & Loading Reports *(v0.1.3)*
+## Saving & Loading Reports
 
 Persist run telemetry to disk for CI artifacts, post-mortem debugging, or dashboards:
 
