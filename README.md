@@ -21,11 +21,8 @@
 <p align="center">
   <a href="https://endevsols.github.io/LongGuard/getting-started/"><strong>⚡ Quick Start</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/"><strong>📖 Documentation</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/integrations/crewai/"><strong>👥 CrewAI</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/guides/decorator/"><strong>🪄 @guarded</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/concepts/how-it-works/"><strong>💡 How It Works</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/concepts/detectors/"><strong>🔍 Loop Detectors</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/integrations/raw-client/"><strong>🐍 Raw Clients</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/guides/configuration/"><strong>⚙️ API Reference</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/concepts/detectors/"><strong>🔍 Loop Detection</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/changelog/"><strong>📜 Changelog</strong></a>
 </p>
 
