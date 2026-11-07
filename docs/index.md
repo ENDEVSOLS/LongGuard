@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/ENDEVSOLS/LongGuard/blob/main/assets/LongGuard-Logo.png?raw=true" alt="LongGuard Logo" width="320">
+</p>
+
 # LongGuard 🛡️
 
 **The Chain-of-Thought Circuit Breaker for LangGraph and LangChain Agents.**
