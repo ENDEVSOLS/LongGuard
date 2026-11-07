@@ -6,7 +6,7 @@ Use LongGuard directly with the OpenAI or Anthropic Python SDK — no LangGraph 
 
 ## How It Works
 
-LongGuard v0.1.3 adds two class methods to `AgentStep` that extract all necessary
+LongGuard provides two class methods on `AgentStep` that extract all necessary
 information from a raw SDK response using duck-typing (no hard SDK dependency):
 
 ```python

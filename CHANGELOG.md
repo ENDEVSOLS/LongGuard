@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.1] - 2026-11-09
+
+### Added
+
+- GitHub issue templates (bug reports, feature requests), issue configuration linking to Discussions and Docs, and pull request template with pre-merge checklist.
+- Community governance and support infrastructure (`CODE_OF_CONDUCT.md` and `SUPPORT.md`).
+- Weekly Dependabot configuration (`.github/dependabot.yml`) for `pip` and `github-actions`.
+- `Changelog` and `Discussions` links under `[project.urls]` in `pyproject.toml`.
+
+### Changed
+
+- Corrected README and documentation claims to match code reality (Python 3.11+ requirement, CrewAI integration, `@guarded` decorator, guarded LangGraph resume, and removed stale v0.1.3 labels and static test count badges).
+
+### Compatibility and limits
+
+- No runtime change: detectors, circuit breaker state machine, defaults, budget boundaries, and report schemas are identical to 0.2.0.
+- Baseline 0.2.0 was published to PyPI on 2026-11-03.
+
 ## [0.2.0] - 2026-10-07
 
 ### Added

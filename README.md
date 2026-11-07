@@ -1,15 +1,8 @@
 <div align="center">
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-light.svg">
-    <img alt="LongGuard Logo" src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/logo-light.svg" width="340">
-  </picture>
+  <img src="https://github.com/ENDEVSOLS/LongGuard/blob/main/assets/LongGuard-Logo.png?raw=true" alt="LongGuard Logo" width="320">
 </p>
-
-
-
 
 **In-flight circuit breaker & reasoning loop recovery for LangGraph & LangChain agents**
 
@@ -28,11 +21,8 @@
 <p align="center">
   <a href="https://endevsols.github.io/LongGuard/getting-started/"><strong>⚡ Quick Start</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/"><strong>📖 Documentation</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/integrations/crewai/"><strong>👥 CrewAI</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/guides/decorator/"><strong>🪄 @guarded</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/concepts/how-it-works/"><strong>💡 How It Works</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/concepts/detectors/"><strong>🔍 Loop Detectors</strong></a> &nbsp;·&nbsp;
-  <a href="https://endevsols.github.io/LongGuard/integrations/raw-client/"><strong>🐍 Raw Clients</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/guides/configuration/"><strong>⚙️ API Reference</strong></a> &nbsp;·&nbsp;
+  <a href="https://endevsols.github.io/LongGuard/concepts/detectors/"><strong>🔍 Loop Detection</strong></a> &nbsp;·&nbsp;
   <a href="https://endevsols.github.io/LongGuard/changelog/"><strong>📜 Changelog</strong></a>
 </p>
 
@@ -60,6 +50,7 @@ LongGuard is part of the **[EnDevSols Long Suite](https://endevsols.com/open-sou
 
 - **[LongParser](https://github.com/ENDEVSOLS/LongParser)** — High-speed, privacy-first local document ingestion & chunking (PDF, DOCX, PPTX, XLSX)
 - **[LongTrainer](https://github.com/ENDEVSOLS/Long-Trainer)** — Production multi-tenant RAG chatbot and agent framework
+- **[LongCache](https://github.com/ENDEVSOLS/LongCache)** — Production semantic similarity caching for LLM and RAG pipelines
 - **[LongTracer](https://github.com/ENDEVSOLS/LongTracer)** — Post-generation hallucination detection via hybrid STS + NLI claim verification
 - **[LongProbe](https://github.com/ENDEVSOLS/LongProbe)** — Sub-second RAG retrieval regression testing with pytest
 - **[LongGuard](https://github.com/ENDEVSOLS/LongGuard)** — **In-flight runtime agent circuit breaker & reasoning loop recovery** ← *You are here*
