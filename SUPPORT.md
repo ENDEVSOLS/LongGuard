@@ -46,3 +46,4 @@ If you encounter unexpected behavior or a bug:
 
 Please **do not** open public GitHub issues for security vulnerabilities.
 Refer to our [Security Policy](SECURITY.md) or email **technology@endevsols.com**.
+
