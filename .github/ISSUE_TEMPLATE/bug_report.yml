@@ -1,0 +1,63 @@
+name: Bug Report
+description: Report a reproducible problem or unexpected behavior in LongGuard
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please check if a similar issue already exists before submitting.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: What happened vs what you expected to happen...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal Reproduction Code
+      description: Provide a minimal, self-contained Python script to reproduce the issue (without API keys).
+      placeholder: |
+        ```python
+        from longguard import CircuitBreaker, GuardConfig, AgentStep
+        ...
+        ```
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: telemetry
+    attributes:
+      label: Telemetry / GuardReport Output
+      description: If applicable, attach redacted `GuardReport.summary()` or JSON output.
+      render: json
+    validations:
+      required: false
+  - type: input
+    id: environment
+    attributes:
+      label: Environment Details
+      description: "Versions: LongGuard version, Python version, OS (e.g. LongGuard 0.2.0, Python 3.12.3, Ubuntu 22.04)"
+      placeholder: "LongGuard 0.2.0, Python 3.12.3, Ubuntu 22.04"
+    validations:
+      required: true
+  - type: input
+    id: framework_versions
+    attributes:
+      label: Framework Versions (if relevant)
+      description: "e.g. LangGraph 1.0.0, LangChain 1.0.2, CrewAI 0.28.0"
+      placeholder: "LangGraph 1.0.0"
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Confirmations
+      options:
+        - label: I have verified this is not a duplicate of an existing issue.
+          required: true
+        - label: I have verified that no sensitive information (API keys, secrets, private data) is included.
+          required: true

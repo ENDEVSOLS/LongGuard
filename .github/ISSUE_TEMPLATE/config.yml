@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/ENDEVSOLS/LongGuard/discussions
+    about: Ask questions, get help, or share how you are using LongGuard.
+  - name: Documentation
+    url: https://endevsols.github.io/LongGuard/
+    about: Read user guides, API references, and tutorials.
+  - name: Security Vulnerability Reporting
+    url: https://github.com/ENDEVSOLS/LongGuard/blob/main/SECURITY.md
+    about: Privately disclose potential security vulnerabilities.
