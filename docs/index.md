@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/ENDEVSOLS/LongGuard/blob/main/assets/LongGuard-Logo.png?raw=true" alt="LongGuard Logo" width="320">
+  <img src="assets/LongGuard-Logo.png" alt="LongGuard Logo" width="320">
 </p>
 
 # LongGuard 🛡️
