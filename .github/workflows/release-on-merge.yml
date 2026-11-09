@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Find merged PR
         id: pr
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -72,12 +72,12 @@ jobs:
             );
             core.setOutput('sha', pr.merge_commit_sha);
       # A push to main is trusted repository code, including merges from forks.
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         if: steps.pr.outputs.sha != ''
         with:
           ref: ${{ steps.pr.outputs.sha }}
           fetch-depth: 0
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         if: steps.pr.outputs.sha != ''
         with:
           python-version: '3.12'

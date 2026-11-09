@@ -40,11 +40,11 @@ jobs:
       publish: ${{ steps.flags.outputs.publish }}
       testpypi: ${{ steps.flags.outputs.testpypi }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v7
       - run: uv python install 3.12
       - run: uv sync --locked --python 3.12 --extra dev --extra langgraph --extra langchain --extra crewai
       - name: Verify tag and source identity
@@ -89,19 +89,19 @@ jobs:
           echo "testpypi=$TESTPYPI" >> "$GITHUB_OUTPUT"
       - name: Upload check evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-evidence
           path: |
             release-evidence.json
             release-coverage.json
       - name: Upload distribution packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist-packages
           path: dist/*
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.notes.outputs.tag }}
           name: LongGuard ${{ steps.notes.outputs.tag }}
@@ -124,7 +124,7 @@ jobs:
       id-token: write
     steps:
       - name: Download distribution packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: dist-packages
           path: dist
@@ -144,7 +144,7 @@ jobs:
       id-token: write
     steps:
       - name: Download distribution packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: dist-packages
           path: dist
@@ -158,7 +158,7 @@ jobs:
     if: needs.build-and-release.outputs.publish == 'true' && needs.build-and-release.outputs.prerelease != 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v7
       - name: Verify package installation and breaker trip from PyPI
         env:
           TARGET_VERSION: ${{ needs.build-and-release.outputs.version }}

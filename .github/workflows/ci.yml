@@ -17,10 +17,10 @@ jobs:
         python-version: ["3.11", "3.12"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v7
         with:
           version: "latest"
 
@@ -69,8 +69,8 @@ jobs:
       matrix:
         dependencies: [locked, newest]
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
       - run: uv python install 3.12
       - name: Install framework contracts
         run: uv sync --locked --python 3.12 --extra dev --extra langgraph --extra langchain --extra crewai
@@ -82,7 +82,7 @@ jobs:
           uv run --no-sync python -c "from importlib.metadata import version; print({n: version(n) for n in ('langgraph', 'langchain', 'crewai')})"
       - name: Execute gates and require real framework tests
         run: uv run --no-sync python scripts/verify_release.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: checks-${{ matrix.dependencies }}
@@ -91,7 +91,7 @@ jobs:
             release-coverage.json
       - name: Reproduce provisional benchmark
         run: uv run --no-sync python tests/benchmarks/run.py --output /tmp/benchmark.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: benchmark-${{ matrix.dependencies }}
           path: /tmp/benchmark.json
