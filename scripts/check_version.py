@@ -84,13 +84,24 @@ def check_distribution_artifacts(root: Path, dist_dir: Path, expected_version: s
     if not dist_dir.exists():
         raise FileNotFoundError(f"Distribution directory {dist_dir} does not exist.")
 
-    wheels = list(dist_dir.glob("*.whl"))
-    sdists = list(dist_dir.glob("*.tar.gz"))
+    wheels = list(dist_dir.glob(f"longguard-{expected_version}*.whl"))
+    sdists = list(dist_dir.glob(f"longguard-{expected_version}*.tar.gz"))
 
     if not wheels:
-        raise ValueError(f"No .whl packages found in {dist_dir}")
+        raise ValueError(
+            f"No .whl packages matching version {expected_version} found in {dist_dir}"
+        )
     if not sdists:
-        raise ValueError(f"No .tar.gz packages found in {dist_dir}")
+        raise ValueError(
+            f"No .tar.gz packages matching version {expected_version} found in {dist_dir}"
+        )
+
+    all_wheels = list(dist_dir.glob("*.whl"))
+    if len(all_wheels) > len(wheels):
+        print(
+            f"WARNING: Found {len(all_wheels) - len(wheels)} other wheel(s) in {dist_dir}",
+            file=sys.stderr,
+        )
 
     errors = []
 
