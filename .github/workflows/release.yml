@@ -119,9 +119,7 @@ jobs:
     needs: build-and-release
     if: needs.build-and-release.outputs.testpypi == 'true'
     runs-on: ubuntu-latest
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/longguard
+    environment: testpypi
     permissions:
       id-token: write
     steps:
@@ -141,9 +139,7 @@ jobs:
     needs: build-and-release
     if: needs.build-and-release.outputs.publish == 'true' && needs.build-and-release.outputs.prerelease != 'true'
     runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/longguard
+    environment: pypi
     permissions:
       id-token: write
     steps:
