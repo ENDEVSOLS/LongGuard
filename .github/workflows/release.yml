@@ -40,7 +40,7 @@ jobs:
       publish: ${{ steps.flags.outputs.publish }}
       testpypi: ${{ steps.flags.outputs.testpypi }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
