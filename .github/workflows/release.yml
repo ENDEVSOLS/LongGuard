@@ -44,7 +44,7 @@ jobs:
         with:
           ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v7
       - run: uv python install 3.12
       - run: uv sync --locked --python 3.12 --extra dev --extra langgraph --extra langchain --extra crewai
       - name: Verify tag and source identity
@@ -158,7 +158,7 @@ jobs:
     if: needs.build-and-release.outputs.publish == 'true' && needs.build-and-release.outputs.prerelease != 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v7
       - name: Verify package installation and breaker trip from PyPI
         env:
           TARGET_VERSION: ${{ needs.build-and-release.outputs.version }}
