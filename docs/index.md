@@ -47,6 +47,9 @@ CLOSED ──(loop detected)──▶ REFLECTING ──(persists)──▶ HALF_
 
 ---
 
+!!! warning "Runtime Boundaries & Known Limits"
+    LongGuard contracts are tested for synchronous execution boundaries (synchronous same-process LangGraph resume and sequential ReAct CrewAI execution). Review the full [Tested Compatibility & Limits Guide](guides/compatibility.md) for detailed runtime boundaries and usage side effects.
+
 ## 30-Second Example (LangGraph)
 
 LongGuard wraps your agent nodes in a single line of code:

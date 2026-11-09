@@ -1,6 +1,6 @@
 # Tested execution and compatibility
 
-The `0.2.0.dev0` preview extends the existing circuit breaker. Package dependency minimums
+LongGuard 0.2.x extends the existing circuit breaker. Package dependency minimums
 remain unchanged; they do not guarantee that every permitted framework release supports
 these execution contracts. Bare `import longguard` keeps framework dependencies optional.
 
