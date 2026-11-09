@@ -101,7 +101,7 @@ jobs:
           name: dist-packages
           path: dist/*
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.notes.outputs.tag }}
           name: LongGuard ${{ steps.notes.outputs.tag }}
