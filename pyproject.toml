@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "longguard"
-version = "0.2.0"
+version = "0.2.1.dev0"
 description = "Circuit breaker middleware for LangGraph/LangChain agents — detect loops, inject Reflect & Pivot, prevent runaway costs"
 readme = "README.md"
 license = "MIT"
@@ -50,8 +50,10 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/ENDEVSOLS/LongGuard"
 Repository = "https://github.com/ENDEVSOLS/LongGuard"
-Issues = "https://github.com/ENDEVSOLS/LongGuard/issues"
 Documentation = "https://endevsols.github.io/LongGuard/"
+Changelog = "https://github.com/ENDEVSOLS/LongGuard/blob/main/CHANGELOG.md"
+Issues = "https://github.com/ENDEVSOLS/LongGuard/issues"
+Discussions = "https://github.com/ENDEVSOLS/LongGuard/discussions"
 
 [project.optional-dependencies]
 langgraph = [

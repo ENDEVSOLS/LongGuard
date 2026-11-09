@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/LongGuard-Logo.png" alt="LongGuard Logo" width="320">
+</p>
+
 # LongGuard 🛡️
 
 **The Chain-of-Thought Circuit Breaker for LangGraph and LangChain Agents.**
@@ -6,8 +10,7 @@
 [![PyPI Downloads](https://img.shields.io/pypi/dm/longguard.svg?color=blue&label=downloads)](https://pypi.org/project/longguard/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests: 271 passing](https://img.shields.io/badge/tests-271%20passing-brightgreen.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/ci.yml)
-[![Coverage: 90%](https://img.shields.io/badge/coverage-90%25-green.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/ci.yml)
+[![CI](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/ci.yml)
 
 ---
 
@@ -72,3 +75,4 @@ app = workflow.compile()
 - Check out the [Quick Start Guide](getting-started.md) to install and configure LongGuard.
 - Learn about the [4 Built-In Detectors](concepts/detectors.md).
 - Explore [LangGraph Integration](integrations/langgraph.md) and [LangChain Integration](integrations/langchain.md).
+- Explore [CrewAI Integration](integrations/crewai.md) and [@guarded Decorator Guide](guides/decorator.md).
