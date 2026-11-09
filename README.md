@@ -43,22 +43,6 @@ LangGraph's built-in `recursion_limit` is a **hard crash** (`GraphRecursionError
 
 ---
 
-<a id="part-of-the-long-suite"></a>
-## 🌐 Part of the Long Suite
-
-LongGuard is part of the **[EnDevSols Long Suite](https://endevsols.com/open-source)** of open-source production AI tools:
-
-- **[LongParser](https://github.com/ENDEVSOLS/LongParser)** — High-speed, privacy-first local document ingestion & chunking (PDF, DOCX, PPTX, XLSX)
-- **[LongTrainer](https://github.com/ENDEVSOLS/Long-Trainer)** — Production multi-tenant RAG chatbot and agent framework
-- **[LongCache](https://github.com/ENDEVSOLS/LongCache)** — Production semantic similarity caching for LLM and RAG pipelines
-- **[LongTracer](https://github.com/ENDEVSOLS/LongTracer)** — Post-generation hallucination detection via hybrid STS + NLI claim verification
-- **[LongProbe](https://github.com/ENDEVSOLS/LongProbe)** — Sub-second RAG retrieval regression testing with pytest
-- **[LongGuard](https://github.com/ENDEVSOLS/LongGuard)** — **In-flight runtime agent circuit breaker & reasoning loop recovery** ← *You are here*
-
-Together, the Long Suite covers the full AI lifecycle from data ingestion and retrieval CI regression to runtime agent safety and post-generation verification.
-
----
-
 <a id="why-longguard"></a>
 ## 💡 Why LongGuard?
 
@@ -291,10 +275,24 @@ print(breaker.report.summary())
 | **Detects Semantic Reasoning Loops** | ❌ No | ✅ **Yes** |
 | **Detects Sudden Cost / Token Spikes** | ❌ No | ✅ **Yes** |
 | **Auto-Injects Recovery Prompts** | ❌ No | ✅ **Yes** |
-| **Safe Graph Resume (no tool replay)** | ❌ No | ✅ **Yes** |
+| **Safe Graph Resume (no tool replay)** | ❌ No | ✅ **Yes** *(sync, same-process)* |
 | **Exit Behavior** | 💥 Unhandled Exception (`Crash`) | 🛡️ **Graceful State Preservation** |
 | **Run Reporting & Telemetry** | ❌ No | ✅ **JSON & Summary Reports** |
 | **Configurable Thresholds** | ❌ Single integer | ✅ **Granular `GuardConfig`** |
+
+---
+
+<a id="compatibility-and-limits"></a>
+## ⚠️ Compatibility & Known Limits
+
+LongGuard runtime contracts are tested and verified under specific execution boundaries:
+
+- **Guarded LangGraph Resume (`compile_guarded_graph` / `GuardedGraph.resume`):** Supports explicit continuation for synchronous two-node graphs (`START -> agent -> tools/END`, `tools -> agent`) within the same controller process using `InMemorySaver`. Async graphs, streaming, subgraphs, parallel tool dispatch, namespaces, and distributed checkpoint continuation are outside current support.
+- **CrewAI Execution (`add_guard_to_crew`):** Explicitly bounded to the tested sequential, synchronous ReAct `CrewAgentExecutor`. Async, hierarchical, batch, planning, memory, or native tool-batch modes fail clearly; callback-only `CrewGuard` remains available.
+- **Detector Evaluation & Cost Tracking:** Held-out detector evaluation metrics are provisional. Dollar cost estimation applies a 50/50 input/output token split when provider-specific token breakdowns are unavailable and is not an invoice billing guarantee.
+- **Non-Invasive Telemetry:** Telemetry reports and checkpoints record execution history; they do not authorize replay or modify external service state.
+
+See the full [Tested Compatibility Guide](https://endevsols.github.io/LongGuard/guides/compatibility/) for complete version matrices and verification details.
 
 ---
 
@@ -327,6 +325,23 @@ config = GuardConfig(
 ```
 
 👉 *For detailed documentation on custom detectors, embedding backends, and LangSmith telemetry, see the [Full Documentation](https://endevsols.github.io/LongGuard/).*
+
+---
+
+## Part of the Long Suite
+
+LongGuard is part of the **Long Suite** — a collection of tools for building, testing, and monitoring production RAG systems.
+
+| Project | Description |
+|---|---|
+| **[LongParser](https://github.com/ENDEVSOLS/LongParser)** | Document ingestion and chunking |
+| **[LongTrainer](https://github.com/ENDEVSOLS/Long-Trainer)** | RAG chatbot framework |
+| **[LongGuard](https://github.com/ENDEVSOLS/LongGuard)** | In-flight circuit breaker and reasoning loop recovery for agents *(you are here)* |
+| **[LongCache](https://github.com/ENDEVSOLS/LongCache)** | Semantic similarity cache for LLM and RAG pipelines |
+| **[LongTracer](https://github.com/ENDEVSOLS/LongTracer)** | Hallucination detection and tracing |
+| **[LongProbe](https://github.com/ENDEVSOLS/LongProbe)** | Retrieval regression testing |
+
+---
 
 ## 🤝 Contributing
 

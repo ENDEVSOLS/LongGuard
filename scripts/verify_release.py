@@ -18,8 +18,15 @@ def main() -> None:
     parser.add_argument("--offline", action="store_true", help="Build using cached dependencies")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
+    dist_dir = root / "dist"
+    if dist_dir.exists():
+        for p in dist_dir.iterdir():
+            if p.is_file() and p.name != ".gitignore":
+                p.unlink()
+
     junit_path = root / "release-tests.xml"
     commands = {
+        "version_check": [sys.executable, "scripts/check_version.py"],
         "ruff": [
             sys.executable,
             "-m",
@@ -44,6 +51,8 @@ def main() -> None:
         ],
         "docs": [sys.executable, "-m", "mkdocs", "build", "--strict"],
         "build": ["uv", "build", *(["--offline"] if args.offline else [])],
+        "twine": [sys.executable, "-m", "twine", "check", "--strict", "dist/*"],
+        "check_dist": [sys.executable, "scripts/check_version.py", "--check-dist"],
     }
     record = {
         "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),

@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.2] - 2026-11-10
+
+### Added
+
+- Tag-driven GitHub Actions release pipeline with PyPI Trusted Publishing (OIDC), digital build provenance attestations, and post-publish clean virtual environment smoke testing.
+- Distribution and version consistency validation (`scripts/check_version.py` and `tests/test_check_version.py`) verifying parity between `pyproject.toml`, `src/longguard/__init__.py`, `uv.lock`, and release distribution artifacts.
+- Twine metadata verification (`twine check --strict`) and built wheel/sdist contents audit integrated into release verification and CI gates.
+
+### Changed
+
+- Documentation limits: Added an explicit "Compatibility & Known Limits" section to README and docs documenting runtime boundaries for guarded graph resume, CrewAI sequential ReAct execution, and detector cost estimation.
+- Clarified "LongGuard vs. LangGraph recursion_limit" comparison table to state synchronous same-process support for graph resume.
+- Strict documentation build (`mkdocs build --strict`) enforced in standard pull request CI.
+
+### Compatibility and limits
+
+- No runtime change: detectors, circuit breaker state machine, defaults, budget boundaries, and report schemas are identical to 0.2.0.
+
 ## [0.2.1] - 2026-11-09
 
 ### Added

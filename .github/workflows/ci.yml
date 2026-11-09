@@ -33,7 +33,16 @@ jobs:
 
       - name: Run Ruff Linter & Formatter
         run: |
-          uv run --python ${{ matrix.python-version }} ruff check src/ tests/
+          uv run --python ${{ matrix.python-version }} ruff check src/ tests/ scripts/
+
+      - name: Check Version Consistency
+        run: |
+          uv run --python ${{ matrix.python-version }} python scripts/check_version.py
+
+      - name: Strict Documentation Build Check
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+        run: |
+          uv run --python ${{ matrix.python-version }} mkdocs build --strict
 
       - name: Run MyPy Type Checker
         run: |
@@ -46,6 +55,11 @@ jobs:
       - name: Verify Package Build
         run: |
           uv build
+
+      - name: Validate Built Distribution and Metadata
+        run: |
+          uv run --python ${{ matrix.python-version }} twine check --strict dist/*
+          uv run --python ${{ matrix.python-version }} python scripts/check_version.py --check-dist
 
   frameworks:
     name: Real frameworks (${{ matrix.dependencies }})
