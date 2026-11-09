@@ -9,22 +9,38 @@ on:
       publish:
         default: false
         type: boolean
+      testpypi:
+        default: false
+        type: boolean
   push:
     tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing version tag to release (for example v0.2.0 or v0.2.0rc1)"
+        description: "Existing version tag to release (for example v0.2.2 or v0.2.2rc1)"
         required: true
-
-permissions:
-  contents: write
+      publish:
+        description: "Publish to PyPI"
+        default: false
+        type: boolean
+      testpypi:
+        description: "Publish dry run to TestPyPI"
+        default: false
+        type: boolean
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.notes.outputs.tag }}
+      version: ${{ steps.meta.outputs.version }}
+      prerelease: ${{ steps.notes.outputs.prerelease }}
+      publish: ${{ steps.flags.outputs.publish }}
+      testpypi: ${{ steps.flags.outputs.testpypi }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
@@ -37,12 +53,20 @@ jobs:
         run: |
           git show-ref --verify "refs/tags/$RELEASE_TAG"
           test "$(git rev-list -n 1 "$RELEASE_TAG")" = "$(git rev-parse HEAD)"
+      - name: Verify version consistency against tag
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          uv run --no-sync python scripts/check_version.py --tag "$RELEASE_TAG"
       - name: Execute and record release gates
         env:
           UV_CACHE_DIR: /tmp/longguard-uv-cache
         run: uv run --no-sync python scripts/verify_release.py
-      - name: Build distribution packages
-        run: uv build
+      - name: Extract metadata
+        id: meta
+        run: |
+          VERSION=$(uv run --no-sync python -c "import tomllib, pathlib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: Generate literal release notes
         id: notes
         env:
@@ -51,6 +75,18 @@ jobs:
           uv run --no-sync python scripts/release_notes.py --tag "$RELEASE_TAG"
           --evidence release-evidence.json --output release_body.md
           --github-output "$GITHUB_OUTPUT"
+      - name: Determine publish flags
+        id: flags
+        run: |
+          IS_PUSH="${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}"
+          PUBLISH="${{ inputs.publish == true }}"
+          TESTPYPI="${{ inputs.testpypi == true }}"
+          if [ "$IS_PUSH" = "true" ] || [ "$PUBLISH" = "true" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "testpypi=$TESTPYPI" >> "$GITHUB_OUTPUT"
       - name: Upload check evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -59,6 +95,11 @@ jobs:
           path: |
             release-evidence.json
             release-coverage.json
+      - name: Upload distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-packages
+          path: dist/*
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
@@ -70,6 +111,87 @@ jobs:
             release-evidence.json
             release-coverage.json
           body_path: release_body.md
-          draft: ${{ inputs.publish != true }}
+          draft: ${{ steps.flags.outputs.publish != 'true' }}
           prerelease: ${{ steps.notes.outputs.prerelease == 'true' }}
           make_latest: ${{ steps.notes.outputs.latest }}
+
+  publish-testpypi:
+    needs: build-and-release
+    if: needs.build-and-release.outputs.testpypi == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/longguard
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distribution packages
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-packages
+          path: dist
+      - name: Publish to TestPyPI via Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          attestations: true
+          skip-existing: true
+
+  publish-pypi:
+    needs: build-and-release
+    if: needs.build-and-release.outputs.publish == 'true' && needs.build-and-release.outputs.prerelease != 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/longguard
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distribution packages
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-packages
+          path: dist
+      - name: Publish to PyPI via Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          attestations: true
+
+  smoke-test:
+    needs: [build-and-release, publish-pypi]
+    if: needs.build-and-release.outputs.publish == 'true' && needs.build-and-release.outputs.prerelease != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: astral-sh/setup-uv@v3
+      - name: Verify package installation and breaker trip from PyPI
+        env:
+          TARGET_VERSION: ${{ needs.build-and-release.outputs.version }}
+        run: |
+          mkdir /tmp/smoke-test
+          cd /tmp/smoke-test
+          uv venv .venv --python 3.12
+          echo "Waiting for longguard==$TARGET_VERSION to propagate on PyPI index..."
+          INSTALLED=false
+          for attempt in $(seq 1 6); do
+            echo "Attempt $attempt: pip install longguard==$TARGET_VERSION"
+            if uv pip install --python .venv/bin/python --no-cache "longguard==$TARGET_VERSION"; then
+              INSTALLED=true
+              break
+            fi
+            sleep 15
+          done
+          if [ "$INSTALLED" != "true" ]; then
+            echo "Failed to install longguard==$TARGET_VERSION from PyPI within timeout"
+            exit 1
+          fi
+          .venv/bin/python -c "
+          import longguard
+          from longguard import CircuitBreaker, GuardConfig, AgentStep
+          assert longguard.__version__ == '$TARGET_VERSION', f'Version mismatch: {longguard.__version__} != $TARGET_VERSION'
+          breaker = CircuitBreaker(GuardConfig(tool_repeat_threshold=2, max_reflections=1))
+          step = AgentStep(step_number=1, thought='loop', action='search', action_input={'q': 'x'}, observation='none')
+          d1 = breaker.check(step)
+          d2 = breaker.check(step)
+          assert d2.action in ('reflect', 'kill'), f'Expected trip, got {d2.action}'
+          print('Post-publish smoke test PASSED for longguard', longguard.__version__)
+          "
