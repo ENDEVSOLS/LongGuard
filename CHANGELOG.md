@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.1.dev6]
+
+### Merged
+
+- release: v0.2.1 — Docs truth, community templates, and metadata cleanup (#6)
+
 ## [0.2.1] - 2026-11-09
 
 ### Added
