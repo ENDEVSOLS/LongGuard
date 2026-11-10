@@ -13,6 +13,7 @@ on:
 permissions:
   contents: write
   pull-requests: read
+  id-token: write
 
 # Keep independent merges from cancelling each other's release runs.
 concurrency:
@@ -96,6 +97,9 @@ jobs:
   release:
     needs: prepare
     if: needs.prepare.outputs.tag != ''
+    permissions:
+      contents: write
+      id-token: write
     uses: ./.github/workflows/release.yml
     with:
       tag: ${{ needs.prepare.outputs.tag }}
