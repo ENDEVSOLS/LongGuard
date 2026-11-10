@@ -12,8 +12,6 @@ on:
       testpypi:
         default: false
         type: boolean
-  push:
-    tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
@@ -78,10 +76,9 @@ jobs:
       - name: Determine publish flags
         id: flags
         run: |
-          IS_PUSH="${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}"
           PUBLISH="${{ inputs.publish == true }}"
           TESTPYPI="${{ inputs.testpypi == true }}"
-          if [ "$IS_PUSH" = "true" ] || [ "$PUBLISH" = "true" ]; then
+          if [ "$PUBLISH" = "true" ]; then
             echo "publish=true" >> "$GITHUB_OUTPUT"
           else
             echo "publish=false" >> "$GITHUB_OUTPUT"
