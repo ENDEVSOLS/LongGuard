@@ -41,7 +41,7 @@ LangChain integration::
     result = guarded.run("Your query here")
 """
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 
 from typing import Any
 
