@@ -1,8 +1,22 @@
 # Tested execution and compatibility
 
+[![Upstream Compatibility Canary](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/canary.yml/badge.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/canary.yml)
+
 LongGuard 0.2.x extends the existing circuit breaker. Package dependency minimums
 remain unchanged; they do not guarantee that every permitted framework release supports
 these execution contracts. Bare `import longguard` keeps framework dependencies optional.
+
+## Upstream Compatibility Matrix
+
+LongGuard continuously verifies compatibility through scheduled nightly and on-demand canary CI workflows that execute integration test suites against both the lowest declared dependency bounds and the latest upstream releases.
+
+| Framework / Library | Declared Minimum | Verified Latest | Canary Status | Verified Integration Contracts |
+|---|---|---|---|---|
+| **LangGraph** | `>=1.0.0` | `1.2.14` | [![Canary](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/canary.yml/badge.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/canary.yml) | Synchronous 2-node graph execution, `compile_guarded_graph`, `GuardedGraph.resume` checkpoint recovery |
+| **LangChain Core** | `>=1.0.0` | `1.6.7` | Passing | Tool execution wrappers, message normalization, `AIMessage`/`ToolMessage` histories |
+| **LangChain** | `>=1.0.0` | `1.4.3` | Passing | `GuardedAgentExecutor`, callback-driven step and loop interception |
+| **CrewAI** | `>=1.15.19` | `1.15.25` (`<1.15.29`) | Passing | Sequential ReAct `Crew.kickoff` execution, `add_guard_to_crew`, execution-scoped hook API (`crewai.hooks.dispatch`) |
+| **OpenAI / Anthropic Client** | Unpinned | Latest | Passing | Direct client decoration (`@guarded`), unresolved tool call cleanup, usage extraction |
 
 ## Execution modes
 
