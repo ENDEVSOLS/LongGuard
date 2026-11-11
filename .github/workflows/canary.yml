@@ -1,0 +1,120 @@
+name: Upstream Compatibility Canary
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # 03:00 UTC daily
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Canary target matrix job to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - latest
+          - minimum
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  canary-latest:
+    name: Upstream Latest Frameworks (Python 3.12)
+    if: github.event_name != 'workflow_dispatch' || inputs.target == 'all' || inputs.target == 'latest'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "latest"
+
+      - name: Set up Python 3.12
+        run: uv python install 3.12
+
+      - name: Install baseline framework contracts
+        run: uv sync --python 3.12 --extra dev --extra langgraph --extra langchain --extra crewai --extra docs
+
+      - name: Upgrade upstream frameworks to newest compatible releases
+        run: |
+          uv pip install --upgrade 'langgraph>=1.0.0' 'langchain>=1.0.0' 'crewai>=1.15.19,<1.15.29' 'openai' 'anthropic'
+
+      - name: Inspect resolved framework versions
+        run: >-
+          uv run --no-sync python -c "from importlib.metadata import version; print({n: version(n) for n in ('langgraph', 'langchain', 'crewai', 'openai', 'anthropic')})"
+
+      - name: Run Integration Test Suite
+        run: uv run --no-sync pytest -m integration -v
+
+      - name: Run Release Verification Gate
+        run: uv run --no-sync python scripts/verify_release.py
+
+      - name: Upload Canary Evidence Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: canary-evidence-latest
+          path: |
+            release-evidence.json
+            release-coverage.json
+
+      - name: Report Canary Failure to GitHub Issues
+        if: failure() && github.repository == 'ENDEVSOLS/LongGuard'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uv run --no-sync python scripts/canary_issue.py \
+            --target latest \
+            --summary "Canary failure: Integration tests or verify_release failed against latest upstream framework packages."
+
+  canary-minimum:
+    name: Minimum Declared Bounds (lowest-direct, Python 3.11)
+    if: github.event_name != 'workflow_dispatch' || inputs.target == 'all' || inputs.target == 'minimum'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "latest"
+
+      - name: Set up Python 3.11
+        run: uv python install 3.11
+
+      - name: Resolve and install lowest declared dependencies
+        run: |
+          uv sync --python 3.11 --resolution lowest-direct --extra dev --extra langgraph --extra langchain --extra crewai --extra docs
+
+      - name: Inspect resolved lowest framework versions
+        run: >-
+          uv run --no-sync python -c "from importlib.metadata import version; print({n: version(n) for n in ('langgraph', 'langchain', 'crewai', 'numpy')})"
+
+      - name: Run Integration Test Suite
+        run: uv run --no-sync pytest -m integration -v
+
+      - name: Run Release Verification Gate
+        run: uv run --no-sync python scripts/verify_release.py
+
+      - name: Upload Canary Evidence Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: canary-evidence-minimum
+          path: |
+            release-evidence.json
+            release-coverage.json
+
+      - name: Report Canary Failure to GitHub Issues
+        if: failure() && github.repository == 'ENDEVSOLS/LongGuard'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uv run --no-sync python scripts/canary_issue.py \
+            --target minimum \
+            --summary "Canary failure: Integration tests or verify_release failed against lowest declared dependency bounds (lowest-direct)."
