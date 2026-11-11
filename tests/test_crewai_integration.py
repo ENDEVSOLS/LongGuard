@@ -9,6 +9,8 @@ from longguard.integrations.crewai import (
     add_guard_to_crew,
 )
 
+pytestmark = pytest.mark.integration
+
 
 class MockCrewAction:
     def __init__(self, tool: str, tool_input: dict, thought: str = "Thinking", tokens: int = 100):

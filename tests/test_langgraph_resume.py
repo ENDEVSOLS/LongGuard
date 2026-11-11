@@ -1,6 +1,10 @@
 """Real LangGraph checkpoint, dispatch, isolation, and explicit resume contracts."""
 
+# ruff: noqa: E402
+
 import pytest
+
+pytestmark = pytest.mark.integration
 
 pytest.importorskip("langgraph")
 
