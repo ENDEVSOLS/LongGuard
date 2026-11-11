@@ -37,7 +37,7 @@ def source_digest(root: Path) -> str:
 
 
 def evaluate(args: argparse.Namespace) -> dict[str, Any]:
-    corpus = json.loads(args.corpus.read_text())
+    corpus = json.loads(args.corpus.read_text(encoding="utf-8"))
     if args.backend == "sentence-transformers" and not (args.model_path and args.model_revision):
         raise ValueError("Provide a local model snapshot and its pinned model revision")
     start = time.perf_counter_ns()

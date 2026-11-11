@@ -12,12 +12,12 @@ from pathlib import Path
 
 
 def get_project_version(root: Path) -> str:
-    pyproject = tomllib.loads((root / "pyproject.toml").read_text())
+    pyproject = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     return pyproject["project"]["version"]
 
 
 def get_init_version(root: Path) -> str:
-    init_content = (root / "src" / "longguard" / "__init__.py").read_text()
+    init_content = (root / "src" / "longguard" / "__init__.py").read_text(encoding="utf-8")
     match = re.search(r'^__version__\s*=\s*["\']([^"\']+)["\']', init_content, re.MULTILINE)
     if not match:
         raise ValueError("Could not find __version__ in src/longguard/__init__.py")
@@ -28,7 +28,7 @@ def get_lock_version(root: Path) -> str:
     lock_file = root / "uv.lock"
     if not lock_file.exists():
         raise FileNotFoundError("uv.lock not found")
-    lock_data = tomllib.loads(lock_file.read_text())
+    lock_data = tomllib.loads(lock_file.read_text(encoding="utf-8"))
     for pkg in lock_data.get("package", []):
         if pkg.get("name") == "longguard":
             return pkg.get("version", "")
@@ -64,7 +64,7 @@ def check_version_sync(root: Path, tag: str | None = None, require_changelog: bo
         if not changelog_path.exists():
             errors.append(f"CHANGELOG.md not found at {changelog_path}")
         else:
-            changelog = changelog_path.read_text()
+            changelog = changelog_path.read_text(encoding="utf-8")
             heading = f"## [{pyproject_ver}]"
             if heading not in changelog:
                 errors.append(

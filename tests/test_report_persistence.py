@@ -132,14 +132,14 @@ class TestSaveJSON:
         report = _build_report()
         out = tmp_path / "report.json"
         report.save(out)
-        data = json.loads(out.read_text())
+        data = json.loads(out.read_text(encoding="utf-8"))
         assert data["total_steps"] == 3
 
     def test_save_explicit_fmt_json(self, tmp_path: Path) -> None:
         report = _build_report()
         out = tmp_path / "myreport.txt"  # unusual extension
         report.save(out, fmt="json")
-        data = json.loads(out.read_text())
+        data = json.loads(out.read_text(encoding="utf-8"))
         assert "total_tokens" in data
 
     def test_save_json_roundtrip(self, tmp_path: Path) -> None:
@@ -179,7 +179,7 @@ class TestSaveYAML:
         # Should have fallen back to a .json file
         json_out = out.with_suffix(".json")
         assert json_out.exists()
-        data = json.loads(json_out.read_text())
+        data = json.loads(json_out.read_text(encoding="utf-8"))
         assert data["total_steps"] == 3
 
     @pytest.mark.skipif(
@@ -193,7 +193,7 @@ class TestSaveYAML:
         out = tmp_path / "report.yaml"
         report.save(out)
         assert out.exists()
-        data = yaml.safe_load(out.read_text())
+        data = yaml.safe_load(out.read_text(encoding="utf-8"))
         assert data["total_steps"] == 3
 
     @pytest.mark.skipif(

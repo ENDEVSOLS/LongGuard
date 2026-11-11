@@ -16,7 +16,7 @@ def generate(root: Path, tag: str, evidence: dict) -> tuple[str, bool]:
     if not re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+(?:rc[0-9]+|\.dev[0-9]+)?", tag):
         raise ValueError("Use a version tag such as v0.2.0rc1")
     version = Version(tag[1:])
-    metadata = tomllib.loads((root / "pyproject.toml").read_text())
+    metadata = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     if str(version) != metadata["project"]["version"]:
         raise ValueError("Release tag does not match package version")
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
@@ -26,7 +26,7 @@ def generate(root: Path, tag: str, evidence: dict) -> tuple[str, bool]:
     checks = evidence.get("checks", {})
     if not required.issubset(checks) or any(checks[k]["exit_code"] != 0 for k in required):
         raise ValueError("Release checks are missing or failed")
-    changelog = (root / "CHANGELOG.md").read_text()
+    changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
     match = re.search(
         rf"^## \[{re.escape(str(version))}\][^\n]*\n(.*?)(?=^## |\Z)",
         changelog,
@@ -55,8 +55,9 @@ def main() -> None:
     parser.add_argument("--github-output", type=Path)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    body, candidate = generate(root, args.tag, json.loads(args.evidence.read_text()))
-    args.output.write_text(body)
+    evidence = json.loads(args.evidence.read_text(encoding="utf-8"))
+    body, candidate = generate(root, args.tag, evidence)
+    args.output.write_text(body, encoding="utf-8")
     if args.github_output:
         with args.github_output.open("a") as stream:
             stream.write(f"tag={args.tag}\nprerelease={str(candidate).lower()}\n")

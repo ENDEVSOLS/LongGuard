@@ -28,7 +28,7 @@ def prepare(root: Path, pr: dict, *, stable: bool = False) -> str:
     source = pr["merge_commit_sha"]
     if git("rev-parse", "HEAD") != source:
         raise ValueError("Checkout must match the merged pull request commit")
-    metadata = tomllib.loads((root / "pyproject.toml").read_text())
+    metadata = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     current = metadata["project"]["version"]
     match = re.fullmatch(r"(\d+\.\d+\.\d+)\.dev\d+", current)
     if match is None:
@@ -61,7 +61,7 @@ def prepare(root: Path, pr: dict, *, stable: bool = False) -> str:
     }
     updates = {}
     for name, (old, new) in replacements.items():
-        content = (root / name).read_text()
+        content = (root / name).read_text(encoding="utf-8")
         if content.count(old) != 1:
             raise ValueError(f"Expected exactly one matching version in {name}")
         updates[name] = content.replace(old, new, 1)
@@ -69,7 +69,7 @@ def prepare(root: Path, pr: dict, *, stable: bool = False) -> str:
     if stable:
         # For stable releases, the CHANGELOG already has the entry under [X.Y.Z].
         # No new entry is added; the existing entry is used as-is.
-        changelog = (root / "CHANGELOG.md").read_text()
+        changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
         if f"## [{version}]" not in changelog:
             raise ValueError(
                 f"Stable release requires an existing changelog entry for [{version}]"
@@ -77,7 +77,7 @@ def prepare(root: Path, pr: dict, *, stable: bool = False) -> str:
     else:
         title = " ".join(pr["title"].split())
         entry = f"## [{version}]\n\n### Merged\n\n- {title} (#{number})\n\n"
-        changelog = (root / "CHANGELOG.md").read_text()
+        changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
         first_entry = re.search(r"^## \[", changelog, re.MULTILINE)
         if first_entry is None:
             raise ValueError("Changelog must contain a version heading")
@@ -86,7 +86,7 @@ def prepare(root: Path, pr: dict, *, stable: bool = False) -> str:
         )
 
     for name, content in updates.items():
-        (root / name).write_text(content)
+        (root / name).write_text(content, encoding="utf-8")
     git("add", "--", *updates)
     commit_type = "release" if stable else "chore"
     git(
@@ -103,7 +103,7 @@ def prepare(root: Path, pr: dict, *, stable: bool = False) -> str:
 
 
 def main() -> None:
-    event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
+    event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
     stable = os.environ.get("RELEASE_STABLE", "").lower() in ("1", "true", "yes")
     tag = prepare(Path(__file__).resolve().parents[1], event["pull_request"], stable=stable)
     with Path(os.environ["GITHUB_OUTPUT"]).open("a") as stream:

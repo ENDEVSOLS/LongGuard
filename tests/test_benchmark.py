@@ -56,7 +56,7 @@ def test_cli_reports_counts_and_undefined_denominators(tmp_path):
         capture_output=True,
         text=True,
     )
-    results = json.loads(output.read_text())
+    results = json.loads(output.read_text(encoding="utf-8"))
     assert results["detectors"]["tool_repeat"]["counts"] == {"tp": 1, "fp": 0, "tn": 1, "fn": 0}
     assert results["detectors"]["tool_repeat"]["precision"] == 1.0
     assert results["detectors"]["semantic_oscillation"]["precision"] is None
@@ -73,6 +73,6 @@ def test_cli_uses_bundled_corpus_by_default(tmp_path):
         capture_output=True,
         text=True,
     )
-    results = json.loads(output.read_text())
+    results = json.loads(output.read_text(encoding="utf-8"))
     assert len(results["traces"]) == 32
     assert all(not result["errors"] for result in results["detectors"].values())

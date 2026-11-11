@@ -43,12 +43,13 @@ def test_versioned_tag_preserves_source_and_can_be_retried(source):
     tag = prepare_merge_release.prepare(root, pr)
     assert tag == "v0.2.0.dev42"
     assert git("rev-parse", f"{tag}^") == pr["merge_commit_sha"]
-    assert tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"] == (
-        "0.2.0.dev42"
-    )
-    assert '__version__ = "0.2.0.dev42"' in (root / "src/longguard/__init__.py").read_text()
-    assert tomllib.loads((root / "uv.lock").read_text())["package"][0]["version"] == ("0.2.0.dev42")
-    changelog = (root / "CHANGELOG.md").read_text()
+    pyproject_text = (root / "pyproject.toml").read_text(encoding="utf-8")
+    assert tomllib.loads(pyproject_text)["project"]["version"] == "0.2.0.dev42"
+    init_text = (root / "src/longguard/__init__.py").read_text(encoding="utf-8")
+    assert '__version__ = "0.2.0.dev42"' in init_text
+    lock_text = (root / "uv.lock").read_text(encoding="utf-8")
+    assert tomllib.loads(lock_text)["package"][0]["version"] == "0.2.0.dev42"
+    changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
     assert changelog.index("## [0.2.0.dev42]") < changelog.index("## [0.1.0]")
     assert pr["title"] in changelog
     assert not (root / "unwanted-file").exists()
