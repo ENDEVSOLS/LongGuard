@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.3] - 2026-11-12
+
+### Added
+
+- 9-cell continuous integration matrix across Ubuntu, macOS, and Windows on Python 3.11, 3.12, and 3.13 (`.github/workflows/ci.yml`).
+- Added official `Programming Language :: Python :: 3.13` classifier to `pyproject.toml`.
+- Configured explicit `asyncio_default_fixture_loop_scope = "function"` in pytest configuration for modern pytest-asyncio compatibility.
+
+### Changed
+
+- CI efficiency optimization: separated code quality, strict typing (`mypy`), documentation builds (`mkdocs --strict`), and package validation (`twine check`) into a fast standalone quality gates job, eliminating redundant execution across matrix cells.
+- Updated README badges and documentation with verified cross-platform compatibility across Linux, macOS, and Windows.
+
+### Fixed
+
+- Enforced explicit `utf-8` encoding across report persistence, version validation, benchmark execution, and test fixtures for Windows compatibility (preventing default ANSI/CP1252 decoding failures).
+
+### Compatibility and limits
+
+- No runtime change: detectors, circuit breaker state machine, defaults, budget boundaries, and report schemas are identical to 0.2.0.
+
 ## [0.2.2] - 2026-11-10
 
 ### Added

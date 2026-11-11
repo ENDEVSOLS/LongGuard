@@ -84,14 +84,16 @@ def main() -> None:
                     record["checks"][name]["exit_code"] = 1
                     record["checks"][name]["stderr"] += f"Required real tests skipped: {module}"
         print(name, record["checks"][name]["exit_code"], flush=True)
-        (root / "release-evidence.json").write_text(json.dumps(record, indent=2) + "\n")
+        evidence_json = json.dumps(record, indent=2) + "\n"
+        (root / "release-evidence.json").write_text(evidence_json, encoding="utf-8")
     coverage_path = root / "release-coverage.json"
     if record["checks"]["pytest"]["exit_code"] == 0 and coverage_path.exists():
-        record["coverage"] = json.loads(coverage_path.read_text())["totals"]
+        record["coverage"] = json.loads(coverage_path.read_text(encoding="utf-8"))["totals"]
     for path in (root / "dist").glob("*"):
         if path.is_file() and (path.name.endswith(".whl") or path.name.endswith(".tar.gz")):
             record["artifacts_sha256"][path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
-    (root / "release-evidence.json").write_text(json.dumps(record, indent=2) + "\n")
+    evidence_json = json.dumps(record, indent=2) + "\n"
+    (root / "release-evidence.json").write_text(evidence_json, encoding="utf-8")
     if any(result["exit_code"] for result in record["checks"].values()):
         raise SystemExit("Release checks failed; inspect release-evidence.json")
 

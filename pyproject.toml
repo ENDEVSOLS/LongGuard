@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "longguard"
-version = "0.2.2"
+version = "0.2.3"
 description = "Circuit breaker middleware for LangGraph/LangChain agents — detect loops, inject Reflect & Pivot, prevent runaway costs"
 readme = "README.md"
 license = "MIT"
@@ -38,6 +38,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: System :: Monitoring",
@@ -65,7 +66,7 @@ langchain = [
     "langchain-core>=1.0.0",
 ]
 crewai = [
-    "crewai>=0.28.0,<1.15.29",
+    "crewai>=1.15.0,<1.15.29",
 ]
 embeddings = [
     "sentence-transformers>=2.7.0",
@@ -127,6 +128,7 @@ ignore_errors = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 markers = [
     "integration: marks tests requiring optional dependencies",
 ]
