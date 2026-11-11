@@ -65,7 +65,7 @@ langchain = [
     "langchain-core>=1.0.0",
 ]
 crewai = [
-    "crewai>=0.28.0,<1.15.29",
+    "crewai>=1.15.0,<1.15.29",
 ]
 embeddings = [
     "sentence-transformers>=2.7.0",
