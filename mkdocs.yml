@@ -92,6 +92,7 @@ nav:
       - Configuration: guides/configuration.md
       - GuardReport & Telemetry: guides/reporting.md
       - Tested Compatibility: guides/compatibility.md
+      - Performance & Overhead: performance.md
       - Detector Benchmarks: guides/benchmarks.md
       - Model Pricing Sources: guides/model-pricing-sources.md
       - Preview Development Evidence: guides/development-evidence.md
