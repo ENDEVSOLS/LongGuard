@@ -1,0 +1,99 @@
+{
+  "version": "0.2.4",
+  "timestamp": "2026-11-12T17:41:39.521110+00:00",
+  "environment": {
+    "os": "Linux",
+    "os_release": "7.0.0-43-generic",
+    "platform": "Linux-7.0.0-43-generic-x86_64-with-glibc2.43",
+    "architecture": "x86_64",
+    "processor": "unknown",
+    "cpu_count": 12,
+    "python_version": "3.12.14",
+    "python_implementation": "CPython",
+    "longguard_version": "0.2.4",
+    "timestamp_utc": "2026-11-12T17:41:39.521110+00:00",
+    "total_duration_seconds": 1.368
+  },
+  "workload": {
+    "steps": 1000,
+    "warmup_steps": 50,
+    "seed": 42
+  },
+  "benchmarks": [
+    {
+      "configuration": "tool_repeat",
+      "backend": "hash",
+      "steps_measured": 1000,
+      "p50_us": 11.04,
+      "p95_us": 19.96,
+      "p99_us": 28.7,
+      "mean_us": 12.81,
+      "stddev_us": 4.63,
+      "min_us": 9.97,
+      "max_us": 95.79,
+      "p50_ms": 0.011,
+      "p95_ms": 0.02,
+      "p99_ms": 0.0287
+    },
+    {
+      "configuration": "semantic_oscillation",
+      "backend": "hash",
+      "steps_measured": 1000,
+      "p50_us": 182.41,
+      "p95_us": 336.82,
+      "p99_us": 409.48,
+      "mean_us": 205.18,
+      "stddev_us": 55.74,
+      "min_us": 100.11,
+      "max_us": 634.82,
+      "p50_ms": 0.1824,
+      "p95_ms": 0.3368,
+      "p99_ms": 0.4095
+    },
+    {
+      "configuration": "dead_end_drift",
+      "backend": "hash",
+      "steps_measured": 1000,
+      "p50_us": 92.82,
+      "p95_us": 584.57,
+      "p99_us": 786.96,
+      "mean_us": 147.37,
+      "stddev_us": 161.16,
+      "min_us": 57.67,
+      "max_us": 1208.12,
+      "p50_ms": 0.0928,
+      "p95_ms": 0.5846,
+      "p99_ms": 0.787
+    },
+    {
+      "configuration": "token_velocity",
+      "backend": "hash",
+      "steps_measured": 1000,
+      "p50_us": 14.59,
+      "p95_us": 38.11,
+      "p99_us": 53.44,
+      "mean_us": 17.93,
+      "stddev_us": 8.59,
+      "min_us": 13.71,
+      "max_us": 78.79,
+      "p50_ms": 0.0146,
+      "p95_ms": 0.0381,
+      "p99_ms": 0.0534
+    },
+    {
+      "configuration": "combined",
+      "backend": "hash",
+      "steps_measured": 1000,
+      "p50_us": 352.73,
+      "p95_us": 846.06,
+      "p99_us": 1044.02,
+      "mean_us": 399.67,
+      "stddev_us": 161.53,
+      "min_us": 230.54,
+      "max_us": 1150.98,
+      "p50_ms": 0.3527,
+      "p95_ms": 0.8461,
+      "p99_ms": 1.044
+    }
+  ]
+}
