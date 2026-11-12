@@ -91,6 +91,19 @@ The reusable release job runs explicitly because tags pushed with `GITHUB_TOKEN`
 do not start another tag workflow. Enable GitHub Actions and merge these workflow
 files into the default branch to activate the automation.
 
+---
+
+## Project Roadmap & Release Train
+
+LongGuard advances through a verified, structured release roadmap:
+- **v0.2.x series**: Release trust, CI cross-platform coverage, nightly framework compatibility canary, and empirical performance overhead baseline.
+- **v0.3.0**: First verified stable minor release.
+- **v0.4.0+**: Streaming guardrails, asynchronous execution parity, OpenTelemetry semantic conventions, and expanded framework adapters.
+
+If you are proposing substantial architectural additions or new detector implementations, please check the [Milestones](https://github.com/ENDEVSOLS/LongGuard/milestones) and start a thread in [GitHub Discussions](https://github.com/ENDEVSOLS/LongGuard/discussions) before opening a pull request.
+
+---
+
 ## License
 
-By contributing to LongGuard, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing to LongGuard, you agree that your contributions will be licensed under the [MIT License](https://github.com/ENDEVSOLS/LongGuard/blob/main/LICENSE).
