@@ -2,9 +2,9 @@
 
 [![Upstream Compatibility Canary](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/canary.yml/badge.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/canary.yml)
 
-LongGuard 0.2.x extends the existing circuit breaker. Package dependency minimums
-remain unchanged; they do not guarantee that every permitted framework release supports
-these execution contracts. Bare `import longguard` keeps framework dependencies optional.
+LongGuard 0.2.x extends the existing circuit breaker. Optional framework dependency
+lower bounds are tested and verified against the execution contracts shown below. Bare `import longguard`
+keeps framework dependencies optional.
 
 ## Upstream Compatibility Matrix
 
