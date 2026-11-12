@@ -95,5 +95,6 @@ nav:
       - Detector Benchmarks: guides/benchmarks.md
       - Model Pricing Sources: guides/model-pricing-sources.md
       - Preview Development Evidence: guides/development-evidence.md
+      - Publishing Standards: guides/publishing-standards.md
   - Contributing: contributing.md
   - Changelog: changelog.md

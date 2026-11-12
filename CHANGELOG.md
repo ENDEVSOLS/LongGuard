@@ -15,9 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automated failure-to-issue reporting and deduplication script (`scripts/canary_issue.py` with test suite `tests/test_canary_issue.py`) automatically creating or appending to GitHub issues labeled `compat-break` on upstream breakages.
 - Selective integration test marker tagging (`pytest.mark.integration`) allowing isolated execution of optional framework contracts (`pytest -m integration`).
 - Published upstream compatibility matrix table and live canary status badge in `docs/guides/compatibility.md` and `README.md`.
+- Documented EnDevSols Long Suite PyPI publishing standards and onboarding checklist in `docs/guides/publishing-standards.md`.
 
 ### Changed
 
+- Standardized release workflow filename from `.github/workflows/release.yml` to `.github/workflows/publish.yml` to unify PyPI Trusted Publishing configuration across all EnDevSols Long Suite tools (`LongCache`, `LongParser`, `LongGuard`).
 - Aligned CrewAI optional dependency lower bound in `pyproject.toml` to verified functional baseline `crewai>=1.15.19,<1.15.29` (verified support for execution-scoped hooks).
 - Decoupled PR CI framework testing in `.github/workflows/ci.yml` to run strictly against locked dependencies, preventing external upstream package releases from blocking unrelated PRs.
 
