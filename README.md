@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <img src="assets/LongGuard-Logo.png" alt="LongGuard Logo" width="320">
+  <img src="https://raw.githubusercontent.com/ENDEVSOLS/LongGuard/main/assets/LongGuard-Logo.png" alt="LongGuard Logo" width="320">
 </p>
 
 **In-flight circuit breaker & reasoning loop recovery for LangGraph & LangChain agents**
