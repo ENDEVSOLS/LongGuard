@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "longguard"
-version = "0.2.3"
+version = "0.2.4"
 description = "Circuit breaker middleware for LangGraph/LangChain agents — detect loops, inject Reflect & Pivot, prevent runaway costs"
 readme = "README.md"
 license = "MIT"
@@ -66,7 +66,7 @@ langchain = [
     "langchain-core>=1.0.0",
 ]
 crewai = [
-    "crewai>=1.15.0,<1.15.29",
+    "crewai>=1.15.19,<1.15.29",
 ]
 embeddings = [
     "sentence-transformers>=2.7.0",

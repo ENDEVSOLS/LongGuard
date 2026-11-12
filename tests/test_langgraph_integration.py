@@ -1,8 +1,12 @@
 """Tests for LangGraph integration."""
 
+import pytest
+
 from longguard.config import GuardConfig
 from longguard.core.breaker import BreakerState
 from longguard.integrations.langgraph import LongGuard, add_guard_to_graph
+
+pytestmark = pytest.mark.integration
 
 
 class TestLongGuardInit:

@@ -5,6 +5,8 @@ import pytest
 from longguard.config import GuardConfig
 from longguard.integrations.langchain import GuardedAgentExecutor, GuardTerminatedException
 
+pytestmark = pytest.mark.integration
+
 
 class MockAgentAction:
     def __init__(self, tool="test_tool", tool_input="test_input", log="thought"):

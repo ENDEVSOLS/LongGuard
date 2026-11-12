@@ -7,6 +7,8 @@ import pytest
 from longguard import AgentStep
 from longguard.integrations.crewai import CrewGuard
 
+pytestmark = pytest.mark.integration
+
 
 @pytest.mark.parametrize(
     "event,action,tokens",

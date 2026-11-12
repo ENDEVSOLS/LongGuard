@@ -8,6 +8,8 @@ import pytest
 from longguard import AbstractLoopDetector, CircuitBreakerTrippedError, DetectionResult, GuardConfig
 from longguard.integrations.langgraph import LongGuard, add_guard_to_graph
 
+pytestmark = pytest.mark.integration
+
 
 class RecordingDetector(AbstractLoopDetector):
     """An application detector that records the observable step it receives."""

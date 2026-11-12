@@ -5,6 +5,8 @@ import pytest
 from longguard.config import GuardConfig
 from longguard.integrations.strands import GuardTerminatedError, StrandsGuard
 
+pytestmark = pytest.mark.integration
+
 
 class MockStrandsAgentWithOnStep:
     def __init__(self):

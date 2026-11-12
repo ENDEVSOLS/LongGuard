@@ -78,22 +78,15 @@ jobs:
         run: uv run --python ${{ matrix.python-version }} pytest tests/
 
   frameworks:
-    name: Real frameworks (${{ matrix.dependencies }})
+    name: Real frameworks (locked)
     needs: [checks]
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        dependencies: [locked, newest]
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
       - run: uv python install 3.12
       - name: Install framework contracts
         run: uv sync --locked --python 3.12 --extra dev --extra langgraph --extra langchain --extra crewai
-      - name: Exercise newest compatible frameworks without changing the lockfile
-        if: matrix.dependencies == 'newest'
-        run: uv pip install --upgrade 'langgraph>=1.0.0' 'langchain>=1.0.0' 'crewai>=1.15.0,<1.15.29'
       - name: Require framework presence
         run: >-
           uv run --no-sync python -c "from importlib.metadata import version; print({n: version(n) for n in ('langgraph', 'langchain', 'crewai')})"
@@ -102,7 +95,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: checks-${{ matrix.dependencies }}
+          name: checks-locked
           path: |
             release-evidence.json
             release-coverage.json
@@ -110,5 +103,5 @@ jobs:
         run: uv run --no-sync python tests/benchmarks/run.py --output /tmp/benchmark.json
       - uses: actions/upload-artifact@v7
         with:
-          name: benchmark-${{ matrix.dependencies }}
+          name: benchmark-locked
           path: /tmp/benchmark.json
