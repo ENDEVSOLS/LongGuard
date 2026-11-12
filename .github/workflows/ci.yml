@@ -37,6 +37,9 @@ jobs:
       - name: Strict Documentation Build Check
         run: uv run --python 3.11 mkdocs build --strict
 
+      - name: Verify Documentation Links
+        run: uv run --python 3.11 python scripts/check_links.py
+
       - name: Verify Package Build
         run: uv build
 

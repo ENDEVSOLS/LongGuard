@@ -27,6 +27,7 @@ def main() -> None:
     junit_path = root / "release-tests.xml"
     commands = {
         "version_check": [sys.executable, "scripts/check_version.py"],
+        "links": [sys.executable, "scripts/check_links.py"],
         "ruff": [
             sys.executable,
             "-m",
