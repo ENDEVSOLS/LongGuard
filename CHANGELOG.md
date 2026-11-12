@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Per-step overhead benchmark harness (`benchmarks/run.py` & `benchmarks/workload.py` with test suite `tests/test_benchmark_overhead.py`) measuring `breaker.check()` p50, p95, and p99 latency across all four detectors individually and combined on a 1,000-step synthetic agent trajectory.
+- Per-step overhead benchmark harness (`tests/benchmarks/overhead.py` & `tests/benchmarks/workload.py` with test suite `tests/test_benchmark_overhead.py`) measuring `breaker.check()` p50, p95, and p99 latency across all four detectors individually and combined on a 1,000-step synthetic agent trajectory.
 - Report-only continuous integration benchmark workflow job in `.github/workflows/ci.yml` running on Ubuntu (Python 3.12) and uploading `performance-benchmark` JSON build artifacts.
 - Comprehensive empirical performance guide in `docs/performance.md` and navigation entry in `mkdocs.yml`, documenting latency percentiles, memory complexity, CI runner caveats, and local reproduction commands.
 - Automated markdown documentation and anchor link verification tool (`scripts/check_links.py` with test suite `tests/test_check_links.py`) integrated into CI quality gates and release verification.

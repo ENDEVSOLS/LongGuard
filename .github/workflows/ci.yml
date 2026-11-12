@@ -129,12 +129,12 @@ jobs:
 
       - name: Run overhead benchmark (1,000 steps)
         run: |
-          mkdir -p benchmarks/results
-          uv run --python 3.12 python -m benchmarks.run --steps 1000 --output benchmarks/results/benchmark-ci-py312.json
+          mkdir -p tests/benchmarks/results
+          uv run --python 3.12 python tests/benchmarks/overhead.py --steps 1000 --output tests/benchmarks/results/benchmark-ci-py312.json
 
       - name: Upload performance benchmark artifact
         uses: actions/upload-artifact@v7
         with:
           name: performance-benchmark
-          path: benchmarks/results/benchmark-ci-py312.json
+          path: tests/benchmarks/results/benchmark-ci-py312.json
 

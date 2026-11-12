@@ -69,12 +69,12 @@ cd LongGuard
 uv sync --extra dev
 
 # Run 1,000-step benchmark with JSON export
-uv run python -m benchmarks.run --steps 1000 --output benchmarks/results/local-performance.json
+uv run python tests/benchmarks/overhead.py --steps 1000 --output tests/benchmarks/results/local-performance.json
 ```
 
 To test with the optional neural embedding backend (requires `longguard[embeddings]`):
 
 ```bash
 uv sync --extra dev --extra embeddings
-uv run python -m benchmarks.run --backend sentence-transformers --steps 1000
+uv run python tests/benchmarks/overhead.py --backend sentence-transformers --steps 1000
 ```

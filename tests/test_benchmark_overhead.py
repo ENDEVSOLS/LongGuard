@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from benchmarks.run import run_benchmark
-from benchmarks.workload import generate_synthetic_stream
+from tests.benchmarks.overhead import run_benchmark
+from tests.benchmarks.workload import generate_synthetic_stream
 
 
 def test_synthetic_stream_generation() -> None:

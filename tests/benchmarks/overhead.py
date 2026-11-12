@@ -30,7 +30,15 @@ from longguard import (
 )
 from longguard.core.breaker import BreakerState
 
-from .workload import generate_synthetic_stream
+try:
+    from .workload import generate_synthetic_stream
+except ImportError:
+    try:
+        from workload import generate_synthetic_stream  # type: ignore[import-not-found]
+    except ImportError:
+        from tests.benchmarks.workload import (
+            generate_synthetic_stream,  # type: ignore[import-not-found]
+        )
 
 CONFIG_NAMES = (
     "tool_repeat",
