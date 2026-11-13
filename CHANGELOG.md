@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.5] - 2026-11-18
+
+### Added
+
+- Per-step overhead benchmark harness (`tests/benchmarks/overhead.py` & `tests/benchmarks/workload.py` with test suite `tests/test_benchmark_overhead.py`) measuring `breaker.check()` p50, p95, and p99 latency across all four detectors individually and combined on a 1,000-step synthetic agent trajectory.
+- Report-only continuous integration benchmark workflow job in `.github/workflows/ci.yml` running on Ubuntu (Python 3.12) and uploading `performance-benchmark` JSON build artifacts.
+- Comprehensive empirical performance guide in `docs/performance.md` and navigation entry in `mkdocs.yml`, documenting latency percentiles, memory complexity, CI runner caveats, and local reproduction commands.
+- Automated markdown documentation and anchor link verification tool (`scripts/check_links.py` with test suite `tests/test_check_links.py`) integrated into CI quality gates and release verification.
+- Dedicated "Roadmap & Release Plan" sections added to `README.md` and `CONTRIBUTING.md`.
+
+### Changed
+
+- Reconciled `README.md` performance claims with empirical benchmark measurements (median ~350 µs on default detectors; p95 < 850 µs with lightweight hash embeddings).
+- Explicitly documented operational tradeoffs between default zero-dependency `HashBasedEmbedder` (microsecond lightweight) and optional `SentenceTransformerEmbedder` (millisecond dense neural) in README and documentation.
+- Consolidated `0.3.0` release notes draft prepared from cumulative patch entries `0.2.1` through `0.2.5`.
+
+### Compatibility and limits
+
+- No runtime behavior change: detectors, circuit breaker state machine, defaults, budget boundaries, and report schemas are identical to 0.2.0.
+- Benchmark timings measured on shared cloud runners are indicative, not guarantees; dedicated production hardware exhibits lower jitter.
+- Repository officially enters **Feature Freeze** for the upcoming stable `0.3.0` release candidate verification.
+
 ## [0.2.4] - 2026-11-16
 
 ### Added

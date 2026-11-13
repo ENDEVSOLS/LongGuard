@@ -48,7 +48,7 @@ LangGraph's built-in `recursion_limit` is a **hard crash** (`GraphRecursionError
 <a id="why-longguard"></a>
 ## 💡 Why LongGuard?
 
-- ⚡ **Sub-millisecond overhead**: Evaluates in-flight agent steps without slowing down LLM inference.
+- ⚡ **Measured Sub-millisecond Overhead**: Median ~350 µs per step across all 4 default detectors combined (p95 < 850 µs with lightweight hash embeddings). Runs in-process without slowing down LLM inference. See [Performance & Overhead](https://endevsols.github.io/LongGuard/performance/).
 - 🔄 **4 loop detectors**: Catches tool repetition, semantic oscillation, dead-end drift, and token velocity spikes.
 - 🧭 **Reflect & Pivot prompt injection**: Guides stuck agents back on track before giving up.
 - 🛡️ **Zero unhandled crashes**: Gracefully terminates and preserves conversation state if recovery fails.
@@ -96,7 +96,8 @@ pip install longguard[embeddings]
 pip install longguard[all]
 ```
 
-> **Python 3.11 – 3.13 tested and supported** on Linux, macOS, and Windows.
+> **Python 3.11 – 3.13 tested and supported** on Linux, macOS, and Windows.  
+> **Lightweight by default:** LongGuard evaluates loops out of the box with zero heavy ML dependencies using `HashBasedEmbedder` (~350 µs median per step). For high-dimensional neural representations, install `pip install longguard[embeddings]`.
 
 ### 1. LangGraph Integration (1 Line)
 
@@ -327,6 +328,21 @@ config = GuardConfig(
 ```
 
 👉 *For detailed documentation on custom detectors, embedding backends, and LangSmith telemetry, see the [Full Documentation](https://endevsols.github.io/LongGuard/).*
+
+---
+
+<a id="roadmap"></a>
+## 🗺️ Roadmap & Release Plan
+
+LongGuard follows a structured, verified patch train to ensure production reliability:
+
+* **v0.2.1 – v0.2.4**: Documentation truth, PyPI Trusted Publishing (OIDC), cross-platform CI (Linux/macOS/Windows × Python 3.11–3.13), and nightly framework compatibility canary.
+* **v0.2.5** *(Current)*: Empirical performance baseline (p50/p95/p99 latency), link checking, and Feature Freeze.
+* **v0.3.0**: Release Candidate multi-OS clean-environment verification and stable promotion.
+* **v0.4.0**: Streaming guard and asynchronous execution parity (`async` breaker, async resume).
+* **v0.5.0**: Enterprise observability (OpenTelemetry semantic conventions, Prometheus metrics, structured logs, and alert sinks).
+
+For full details, discussions, and milestone tracks, see [GitHub Discussions](https://github.com/ENDEVSOLS/LongGuard/discussions) and [Project Milestones](https://github.com/ENDEVSOLS/LongGuard/milestones).
 
 ---
 

@@ -37,6 +37,9 @@ jobs:
       - name: Strict Documentation Build Check
         run: uv run --python 3.11 mkdocs build --strict
 
+      - name: Verify Documentation Links
+        run: uv run --python 3.11 python scripts/check_links.py
+
       - name: Verify Package Build
         run: uv build
 
@@ -105,3 +108,33 @@ jobs:
         with:
           name: benchmark-locked
           path: /tmp/benchmark.json
+
+  benchmark:
+    name: Overhead Benchmark (Report Only)
+    needs: [checks]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "latest"
+
+      - name: Set up Python 3.12
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: uv sync --python 3.12 --extra dev
+
+      - name: Run overhead benchmark (1,000 steps)
+        run: |
+          mkdir -p tests/benchmarks/results
+          uv run --python 3.12 python tests/benchmarks/overhead.py --steps 1000 --output tests/benchmarks/results/benchmark-ci-py312.json
+
+      - name: Upload performance benchmark artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: performance-benchmark
+          path: tests/benchmarks/results/benchmark-ci-py312.json
+
