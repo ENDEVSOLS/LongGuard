@@ -37,6 +37,8 @@ def test_example_script(
 
     env = os.environ.copy()
     env["PYTHONPATH"] = str(ROOT_DIR / "src")
+    env["PYTHONIOENCODING"] = "utf-8"
+    env["PYTHONUTF8"] = "1"
     env["CREWAI_DISABLE_TELEMETRY"] = "true"
     env["OTEL_SDK_DISABLED"] = "true"
     env["CREWAI_TRACING_ENABLED"] = "false"
@@ -46,6 +48,8 @@ def test_example_script(
         cwd=tmp_path,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         env=env,
         timeout=60,
     )
