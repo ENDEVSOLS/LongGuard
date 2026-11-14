@@ -166,6 +166,93 @@ def check_distribution_artifacts(root: Path, dist_dir: Path, expected_version: s
         )
 
 
+def compare_wheels(candidate_wheel: Path, target_wheel: Path) -> None:
+    """Compare candidate and target wheels to verify zero runtime behavior divergence.
+
+    The wheels must contain identical files and identical contents for all runtime
+    modules. Only version identifiers (__version__, METADATA, RECORD) are permitted
+    to differ.
+    """
+    if not candidate_wheel.exists():
+        raise FileNotFoundError(f"Candidate wheel does not exist: {candidate_wheel}")
+    if not target_wheel.exists():
+        raise FileNotFoundError(f"Target wheel does not exist: {target_wheel}")
+
+    errors = []
+
+    def normalize_name(name: str) -> str:
+        parts = name.split("/", 1)
+        if (
+            len(parts) == 2
+            and parts[0].startswith("longguard-")
+            and parts[0].endswith(".dist-info")
+        ):
+            return f"[DIST-INFO]/{parts[1]}"
+        return name
+
+    with (
+        zipfile.ZipFile(candidate_wheel, "r") as zf_cand,
+        zipfile.ZipFile(target_wheel, "r") as zf_targ,
+    ):
+        cand_map = {normalize_name(name): name for name in zf_cand.namelist()}
+        targ_map = {normalize_name(name): name for name in zf_targ.namelist()}
+
+        cand_norm_set = set(cand_map.keys())
+        targ_norm_set = set(targ_map.keys())
+
+        missing_in_target = cand_norm_set - targ_norm_set
+        extra_in_target = targ_norm_set - cand_norm_set
+
+        if missing_in_target:
+            errors.append(
+                f"Target wheel missing files present in candidate: {sorted(missing_in_target)}"
+            )
+        if extra_in_target:
+            errors.append(
+                f"Target wheel contains unexpected extra files: {sorted(extra_in_target)}"
+            )
+
+        for norm_name in sorted(cand_norm_set & targ_norm_set):
+            cand_raw = zf_cand.read(cand_map[norm_name])
+            targ_raw = zf_targ.read(targ_map[norm_name])
+
+            if norm_name == "longguard/__init__.py":
+                cand_text = re.sub(
+                    r'^__version__\s*=\s*["\'].*["\']',
+                    "",
+                    cand_raw.decode("utf-8"),
+                    flags=re.MULTILINE,
+                )
+                targ_text = re.sub(
+                    r'^__version__\s*=\s*["\'].*["\']',
+                    "",
+                    targ_raw.decode("utf-8"),
+                    flags=re.MULTILINE,
+                )
+                if cand_text != targ_text:
+                    errors.append(
+                        "Runtime divergence in longguard/__init__.py beyond __version__ declaration"
+                    )
+            elif norm_name.startswith("[DIST-INFO]/"):
+                dist_sub = norm_name[len("[DIST-INFO]/") :]
+                if dist_sub in ("METADATA", "RECORD"):
+                    continue
+                if cand_raw != targ_raw:
+                    errors.append(f"Metadata file {dist_sub} differs between candidate and target")
+            else:
+                if cand_raw != targ_raw:
+                    errors.append(
+                        f"Runtime module {norm_name} differs between candidate and target"
+                    )
+
+    if errors:
+        for err in errors:
+            print(f"ERROR: {err}", file=sys.stderr)
+        raise ValueError(
+            f"{len(errors)} wheel comparison check(s) failed: {'; '.join(errors)}"
+        )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -182,6 +269,18 @@ def main() -> None:
         "--check-dist", action="store_true", help="Verify built artifacts in dist/"
     )
     parser.add_argument("--dist-dir", type=Path, default=None, help="Custom dist directory")
+    parser.add_argument(
+        "--compare-wheel",
+        type=Path,
+        default=None,
+        help="Path to candidate wheel to verify zero divergence against target wheel in dist/",
+    )
+    parser.add_argument(
+        "--target-wheel",
+        type=Path,
+        default=None,
+        help="Path to target wheel to compare (defaults to built wheel in dist/)",
+    )
     args = parser.parse_args()
 
     root = args.root.resolve()
@@ -193,6 +292,21 @@ def main() -> None:
             dist_dir = (args.dist_dir or (root / "dist")).resolve()
             check_distribution_artifacts(root, dist_dir, version)
             print(f"Distribution artifact check passed in {dist_dir}")
+
+        if args.compare_wheel:
+            target_wheel = args.target_wheel
+            if not target_wheel:
+                dist_dir = (args.dist_dir or (root / "dist")).resolve()
+                wheels = list(dist_dir.glob(f"longguard-{version}*.whl"))
+                if not wheels:
+                    raise ValueError(
+                        f"No built wheel matching version {version} found in {dist_dir} to compare"
+                    )
+                target_wheel = wheels[0]
+            compare_wheels(args.compare_wheel.resolve(), target_wheel.resolve())
+            print(
+                f"Wheel diff verification passed: {args.compare_wheel.name} == {target_wheel.name}"
+            )
 
     except Exception as exc:
         print(f"FAILED: {exc}", file=sys.stderr)

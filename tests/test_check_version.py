@@ -122,3 +122,88 @@ def test_check_distribution_artifacts_missing_py_typed(tmp_path: Path):
 
     with pytest.raises(ValueError, match="missing PEP 561 marker"):
         check_version.check_distribution_artifacts(tmp_path, dist_dir, "0.2.2")
+
+
+def test_compare_wheels_valid(tmp_path: Path):
+    """Verify that compare_wheels passes when only version and dist-info metadata differ."""
+    whl_cand = tmp_path / "longguard-0.2.5-py3-none-any.whl"
+    whl_targ = tmp_path / "longguard-0.3.0-py3-none-any.whl"
+
+    shared_code = 'def foo(): return "bar"\n'
+
+    with zipfile.ZipFile(whl_cand, "w") as zf:
+        zf.writestr("longguard/__init__.py", '__version__ = "0.2.5"\n' + shared_code)
+        zf.writestr("longguard/core/breaker.py", 'class Breaker: pass\n')
+        zf.writestr("longguard-0.2.5.dist-info/METADATA", "Version: 0.2.5\n")
+        zf.writestr("longguard-0.2.5.dist-info/RECORD", "hash1\n")
+        zf.writestr("longguard-0.2.5.dist-info/WHEEL", "Wheel-Version: 1.0\n")
+
+    with zipfile.ZipFile(whl_targ, "w") as zf:
+        zf.writestr("longguard/__init__.py", '__version__ = "0.3.0"\n' + shared_code)
+        zf.writestr("longguard/core/breaker.py", 'class Breaker: pass\n')
+        zf.writestr("longguard-0.3.0.dist-info/METADATA", "Version: 0.3.0\n")
+        zf.writestr("longguard-0.3.0.dist-info/RECORD", "hash2\n")
+        zf.writestr("longguard-0.3.0.dist-info/WHEEL", "Wheel-Version: 1.0\n")
+
+    check_version.compare_wheels(whl_cand, whl_targ)
+
+
+def test_compare_wheels_runtime_divergence_raises(tmp_path: Path):
+    """Verify that compare_wheels fails if runtime modules differ."""
+    whl_cand = tmp_path / "longguard-0.2.5-py3-none-any.whl"
+    whl_targ = tmp_path / "longguard-0.3.0-py3-none-any.whl"
+
+    with zipfile.ZipFile(whl_cand, "w") as zf:
+        zf.writestr("longguard/__init__.py", '__version__ = "0.2.5"\n')
+        zf.writestr("longguard/core/breaker.py", 'class Breaker: v1 = True\n')
+        zf.writestr("longguard-0.2.5.dist-info/METADATA", "Version: 0.2.5\n")
+        zf.writestr("longguard-0.2.5.dist-info/RECORD", "hash1\n")
+
+    with zipfile.ZipFile(whl_targ, "w") as zf:
+        zf.writestr("longguard/__init__.py", '__version__ = "0.3.0"\n')
+        zf.writestr("longguard/core/breaker.py", 'class Breaker: v2 = True\n')
+        zf.writestr("longguard-0.3.0.dist-info/METADATA", "Version: 0.3.0\n")
+        zf.writestr("longguard-0.3.0.dist-info/RECORD", "hash2\n")
+
+    with pytest.raises(ValueError, match="Runtime module longguard/core/breaker.py differs"):
+        check_version.compare_wheels(whl_cand, whl_targ)
+
+
+def test_compare_wheels_init_code_divergence_raises(tmp_path: Path):
+    """Verify that compare_wheels fails if __init__.py code outside __version__ differs."""
+    whl_cand = tmp_path / "longguard-0.2.5-py3-none-any.whl"
+    whl_targ = tmp_path / "longguard-0.3.0-py3-none-any.whl"
+
+    with zipfile.ZipFile(whl_cand, "w") as zf:
+        zf.writestr("longguard/__init__.py", '__version__ = "0.2.5"\nx = 1\n')
+        zf.writestr("longguard-0.2.5.dist-info/METADATA", "Version: 0.2.5\n")
+        zf.writestr("longguard-0.2.5.dist-info/RECORD", "hash1\n")
+
+    with zipfile.ZipFile(whl_targ, "w") as zf:
+        zf.writestr("longguard/__init__.py", '__version__ = "0.3.0"\nx = 2\n')
+        zf.writestr("longguard-0.3.0.dist-info/METADATA", "Version: 0.3.0\n")
+        zf.writestr("longguard-0.3.0.dist-info/RECORD", "hash2\n")
+
+    with pytest.raises(ValueError, match="Runtime divergence in longguard/__init__.py"):
+        check_version.compare_wheels(whl_cand, whl_targ)
+
+
+def test_compare_wheels_file_structure_divergence_raises(tmp_path: Path):
+    """Verify that compare_wheels fails if files are added or missing."""
+    whl_cand = tmp_path / "longguard-0.2.5-py3-none-any.whl"
+    whl_targ = tmp_path / "longguard-0.3.0-py3-none-any.whl"
+
+    with zipfile.ZipFile(whl_cand, "w") as zf:
+        zf.writestr("longguard/__init__.py", '__version__ = "0.2.5"\n')
+        zf.writestr("longguard-0.2.5.dist-info/METADATA", "Version: 0.2.5\n")
+        zf.writestr("longguard-0.2.5.dist-info/RECORD", "hash1\n")
+
+    with zipfile.ZipFile(whl_targ, "w") as zf:
+        zf.writestr("longguard/__init__.py", '__version__ = "0.3.0"\n')
+        zf.writestr("longguard/new_module.py", "# new\n")
+        zf.writestr("longguard-0.3.0.dist-info/METADATA", "Version: 0.3.0\n")
+        zf.writestr("longguard-0.3.0.dist-info/RECORD", "hash2\n")
+
+    with pytest.raises(ValueError, match="unexpected extra files"):
+        check_version.compare_wheels(whl_cand, whl_targ)
+
