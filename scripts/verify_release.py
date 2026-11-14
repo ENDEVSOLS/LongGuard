@@ -79,7 +79,7 @@ def main() -> None:
         }
         if name == "pytest" and completed.returncode == 0:
             cases = list(ET.parse(junit_path).iter("testcase"))
-            for module in ("test_crewai_execution", "test_langgraph_resume"):
+            for module in ("test_crewai_execution", "test_langgraph_resume", "test_examples"):
                 selected = [case for case in cases if module in case.get("classname", "")]
                 if not selected or any(case.find("skipped") is not None for case in selected):
                     record["checks"][name]["exit_code"] = 1
