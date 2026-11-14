@@ -275,7 +275,7 @@ class GuardReport:
 
         if fmt == "yaml":
             try:
-                import yaml  # type: ignore[import-untyped]
+                import yaml
 
                 content = yaml.dump(data, allow_unicode=True, sort_keys=False)
                 path.write_text(content, encoding="utf-8")

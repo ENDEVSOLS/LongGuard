@@ -1,6 +1,9 @@
 # Framework Coverage & Trust: development evidence
 
-Status: **Unpublished `0.2.0.dev0` preview** on `feat/v020-framework-trust`.
+> [!NOTE]
+> **Historical Audit Log:** This document records the original baseline verification evidence from the `0.2.0` framework trust sprint (2026-10-08). For current release verification and compatibility status, see the [Upstream Compatibility Matrix](compatibility.md) and [Publishing Standards](publishing-standards.md).
+
+Status: **Historical `0.2.0.dev0` baseline log** on `feat/v020-framework-trust`.
 Implementation baseline: `7b02104b47277cb5948c84e9ca4830e5f27df8c4` (`v0.1.4`).
 Local verification date: 2026-10-08. Release publication remains a maintainer decision.
 
