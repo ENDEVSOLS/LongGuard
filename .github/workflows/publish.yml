@@ -112,8 +112,41 @@ jobs:
           prerelease: ${{ steps.notes.outputs.prerelease == 'true' }}
           make_latest: ${{ steps.notes.outputs.latest }}
 
-  publish-testpypi:
+  rc-smoke-test:
     needs: build-and-release
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: astral-sh/setup-uv@v7
+      - name: Download distribution packages
+        uses: actions/download-artifact@v8
+        with:
+          name: dist-packages
+          path: dist
+      - name: Verify wheel installation and breaker trip in clean environment
+        env:
+          TARGET_VERSION: ${{ needs.build-and-release.outputs.version }}
+        run: |
+          uv venv .venv --python ${{ matrix.python-version }}
+          uv pip install --python .venv --no-cache dist/*.whl
+          uv run --python .venv python -c "
+          import longguard
+          from longguard import CircuitBreaker, GuardConfig, AgentStep
+          assert longguard.__version__ == '$TARGET_VERSION', f'Version mismatch: {longguard.__version__} != $TARGET_VERSION'
+          breaker = CircuitBreaker(GuardConfig(tool_repeat_threshold=2, max_reflections=1))
+          step = AgentStep(step_number=1, thought='loop', action='search', action_input={'q': 'x'}, observation='none')
+          d1 = breaker.check(step)
+          d2 = breaker.check(step)
+          assert d2.action in ('reflect', 'kill'), f'Expected trip, got {d2.action}'
+          print('Pre-publish RC wheel smoke test PASSED for longguard', longguard.__version__)
+          "
+
+  publish-testpypi:
+    needs: [build-and-release, rc-smoke-test]
     if: needs.build-and-release.outputs.testpypi == 'true'
     runs-on: ubuntu-latest
     environment: testpypi
@@ -133,7 +166,7 @@ jobs:
           skip-existing: true
 
   publish-pypi:
-    needs: build-and-release
+    needs: [build-and-release, rc-smoke-test]
     if: needs.build-and-release.outputs.publish == 'true' && needs.build-and-release.outputs.prerelease != 'true'
     runs-on: ubuntu-latest
     environment: pypi
@@ -153,21 +186,25 @@ jobs:
   smoke-test:
     needs: [build-and-release, publish-pypi]
     if: needs.build-and-release.outputs.publish == 'true' && needs.build-and-release.outputs.prerelease != 'true'
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: astral-sh/setup-uv@v7
       - name: Verify package installation and breaker trip from PyPI
+        shell: bash
         env:
           TARGET_VERSION: ${{ needs.build-and-release.outputs.version }}
         run: |
-          mkdir /tmp/smoke-test
-          cd /tmp/smoke-test
+          mkdir -p /tmp/smoke-test || true
           uv venv .venv --python 3.12
           echo "Waiting for longguard==$TARGET_VERSION to propagate on PyPI index..."
           INSTALLED=false
-          for attempt in $(seq 1 6); do
+          for attempt in $(seq 1 8); do
             echo "Attempt $attempt: pip install longguard==$TARGET_VERSION"
-            if uv pip install --python .venv/bin/python --no-cache "longguard==$TARGET_VERSION"; then
+            if uv pip install --python .venv --no-cache "longguard==$TARGET_VERSION"; then
               INSTALLED=true
               break
             fi
@@ -177,7 +214,7 @@ jobs:
             echo "Failed to install longguard==$TARGET_VERSION from PyPI within timeout"
             exit 1
           fi
-          .venv/bin/python -c "
+          uv run --python .venv python -c "
           import longguard
           from longguard import CircuitBreaker, GuardConfig, AgentStep
           assert longguard.__version__ == '$TARGET_VERSION', f'Version mismatch: {longguard.__version__} != $TARGET_VERSION'
@@ -186,5 +223,5 @@ jobs:
           d1 = breaker.check(step)
           d2 = breaker.check(step)
           assert d2.action in ('reflect', 'kill'), f'Expected trip, got {d2.action}'
-          print('Post-publish smoke test PASSED for longguard', longguard.__version__)
+          print('Post-publish PyPI smoke test PASSED for longguard', longguard.__version__)
           "
