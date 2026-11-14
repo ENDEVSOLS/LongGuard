@@ -83,8 +83,8 @@ dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=1.0.0",
     "pytest-cov>=5.0.0",
-    "ruff>=0.5.0",
-    "mypy>=1.5.0,<2.0.0",
+    "ruff>=0.9.0",
+    "mypy>=1.14.0,<2.0.0",
     "mkdocs>=1.5.0",
     "mkdocs-material>=9.5.0",
     "twine>=5.0.0",
@@ -99,6 +99,7 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["UP038"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -118,6 +119,8 @@ module = [
     "langgraph.*",
     "crewai",
     "crewai.*",
+    "yaml",
+    "yaml.*",
 ]
 ignore_missing_imports = true
 
