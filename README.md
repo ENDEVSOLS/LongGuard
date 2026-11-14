@@ -336,9 +336,8 @@ config = GuardConfig(
 
 LongGuard follows a structured, verified patch train to ensure production reliability:
 
-* **v0.2.1 – v0.2.4**: Documentation truth, PyPI Trusted Publishing (OIDC), cross-platform CI (Linux/macOS/Windows × Python 3.11–3.13), and nightly framework compatibility canary.
-* **v0.2.5** *(Current)*: Empirical performance baseline (p50/p95/p99 latency), link checking, and Feature Freeze.
-* **v0.3.0**: Release Candidate multi-OS clean-environment verification and stable promotion.
+* **v0.2.1 – v0.2.5**: Documentation truth, PyPI Trusted Publishing (OIDC), cross-platform CI (Linux/macOS/Windows × Python 3.11–3.13), nightly framework compatibility canary, and empirical performance baseline.
+* **v0.3.0** *(Current)*: Release Candidate multi-OS clean-environment verification, candidate wheel diff validation, and stable promotion.
 * **v0.4.0**: Streaming guard and asynchronous execution parity (`async` breaker, async resume).
 * **v0.5.0**: Enterprise observability (OpenTelemetry semantic conventions, Prometheus metrics, structured logs, and alert sinks).
 

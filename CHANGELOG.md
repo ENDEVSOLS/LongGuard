@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.3.0] - 2026-11-20
+
+### Added
+
+- Multi-OS clean-environment wheel and PyPI installation smoke-test matrix across Ubuntu, macOS, and Windows on Python 3.11, 3.12, and 3.13 (`.github/workflows/publish.yml`).
+- Candidate-to-stable wheel diff verification tool (`scripts/check_version.py --compare-wheel`) enforcing zero runtime divergence between release candidates and stable distributions.
+- Automated credential-free repository examples execution test suite (`tests/test_examples.py`) verified in release gates.
+- Consolidated release trust foundation from the 0.2.x patch series:
+  - Tag-driven release pipeline using PyPI Trusted Publishing (OIDC) with digital build provenance attestations (`0.2.2`).
+  - Version consistency validation tool (`scripts/check_version.py`) ensuring synchronization across `pyproject.toml`, `src/longguard/__init__.py`, `uv.lock`, and distribution artifacts (`0.2.2`).
+  - Cross-platform 9-cell CI matrix supporting Python 3.11, 3.12, and 3.13 across Ubuntu, macOS, and Windows with line-ending and encoding fixes (`0.2.3`).
+  - Nightly framework compatibility canary against latest and lowest declared dependency bounds with automated GitHub issue reporting (`0.2.4`).
+  - Per-step overhead benchmark harness with empirical p50/p95/p99 latency reporting in `docs/performance.md` (`0.2.5`).
+  - Automated Markdown link checker (`scripts/check_links.py`) preventing broken documentation links (`0.2.5`).
+  - Community governance infrastructure including issue/PR templates, Code of Conduct, and Dependabot automation (`0.2.1`).
+
+### Changed
+
+- Promoted verified `0.2.5` feature-frozen candidate to stable `0.3.0`.
+- Documentation and README claims reconciled with code reality: verified Python support, explicit runtime Limits section (`0.2.2`), and measured performance wording (`0.2.5`).
+- Aligned optional framework dependency lower bounds to lowest verified passing versions (`crewai>=1.15.19`) (`0.2.4`).
+
+### Compatibility and limits
+
+- No runtime behavior changes: core imports, detector defaults, circuit breaker state machine, budget boundaries, and report schemas are identical to 0.2.0.
+- 0.2.0 runtime boundaries remain: guarded graph resume is synchronous and same-process; CrewAI support is bounded to the tested sequential ReAct executor; detector evaluation results are provisional.
+- Performance benchmark percentiles are measured on shared CI runners and serve as indicative baselines, not hard SLAs.
+
 ## [0.2.5] - 2026-11-18
 
 ### Added
