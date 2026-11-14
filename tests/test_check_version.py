@@ -19,7 +19,7 @@ import check_version  # noqa: E402
 def test_repo_version_consistency():
     """Verify that current repository passes version consistency check."""
     version = check_version.check_version_sync(REPO_ROOT)
-    assert version.startswith("0.2.")
+    assert version.startswith("0.3.")
 
 
 def test_version_mismatch_raises(tmp_path: Path):
