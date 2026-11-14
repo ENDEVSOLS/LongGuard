@@ -18,6 +18,9 @@ pip install "longguard[langgraph]"
 # With LangChain support
 pip install "longguard[langchain]"
 
+# With CrewAI support
+pip install "longguard[crewai]"
+
 # With high-quality sentence embeddings (optional)
 pip install "longguard[embeddings]"
 

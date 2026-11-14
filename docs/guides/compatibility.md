@@ -2,7 +2,7 @@
 
 [![Upstream Compatibility Canary](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/canary.yml/badge.svg)](https://github.com/ENDEVSOLS/LongGuard/actions/workflows/canary.yml)
 
-LongGuard 0.2.x extends the existing circuit breaker. Optional framework dependency
+LongGuard 0.3.x extends the existing circuit breaker. Optional framework dependency
 lower bounds are tested and verified against the execution contracts shown below. Bare `import longguard`
 keeps framework dependencies optional.
 
@@ -45,8 +45,8 @@ than registering global handlers.
 | Latest stable verification | 3.12.14 | 1.2.14 | 1.4.3 / 1.6.7 | 1.15.25 |
 
 Latest-version results and exact commands are recorded in the development evidence after
-verification. Only executed checks establish support. CI runs the existing core Python
-3.11–3.12 Ubuntu/macOS matrix plus separate locked/newest framework jobs; configuration
+verification. Only executed checks establish support. CI runs the 9-cell Python
+3.11–3.13 matrix across Ubuntu, macOS, and Windows plus separate locked/newest framework jobs; configuration
 of a CI job is not evidence that those platforms passed locally.
 
 ## Usage and side effects
